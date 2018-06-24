@@ -1,0 +1,71 @@
+service: web-api
+
+provider:
+  name: aws
+  region: us-east-2
+  runtime: python3.6
+
+  environment:
+    REGION: "us-east-2"
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-2:*:table/*"
+
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
+
+functions:
+  create:
+    handler: bin/organization/create
+    events:
+      - http:
+          path: organization/create
+          method: post
+          cors:
+            origins:
+            - '*'
+  get-organization:
+    handler: bin/organization/get
+    events:
+      - http:
+          path: organization/get
+          method: get
+          cors:
+            origins:
+            - '*'
+  get-organizations:
+      handler: bin/organization/get-multiple
+      events:
+        - http:
+            path: organization/get-multiple
+            method: get
+            cors:
+              origins:
+              - '*'
+
+resources:
+  Resources:
+    organizationsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Organizations
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

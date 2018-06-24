@@ -1,0 +1,106 @@
+version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/python:3.6
+  working_directory: /go/src/github.com/good-emporium/web-api
+
+persist_to_workspace: &persist_to_workspace
+  persist_to_workspace:
+    root: .
+    paths:
+      - .
+
+attach_workspace: &attach_workspace
+  attach_workspace:
+    at: .
+
+install_node_and_serverless: &install_node_and_serverless
+  run:
+    name: Installing node and serverless
+    command: |
+      pushd /tmp
+      curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+      sudo apt-get install -y nodejs
+      sudo apt-get install build-essential libssl-dev
+      sudo npm i -g serverless
+      popd
+restore_go_cache: &restore_go_cache
+  restore_cache:
+    key: go-cache
+
+restore_node_cache: &restore_node_cache
+  restore_cache:
+    key: node-cache
+
+save_go_cache: &save_go_cache
+  save_cache:
+    key: go-cache
+    paths:
+      - /go/pkg
+
+save_node_cache: &save_node_cache
+  save_cache:
+    key: node-cache
+    paths:
+      - ./node_modules
+# TODO ensure path above is correct
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - *restore_go_cache
+      - make
+      - *save_go_cache
+      - *persist_to_workspace
+
+  deploy_staging:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - *restore_node_cache
+      - *install_node_and_serverless
+      - *save_node_cache
+      - run:
+          name: Deploy to the staging environment
+          command: sls deploy --stage v0-staging
+
+  deploy_prod:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - *restore_node_cache
+      - *install_node_and_serverless
+      - *save_node_cache
+      - run:
+          name: Deploy to the prod environment
+          command: sls deploy --stage v0
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+
+      - deploy_staging:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /^v.*/
+
+      - deploy_prod:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
