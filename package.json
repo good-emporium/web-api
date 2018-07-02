@@ -1,0 +1,11 @@
+{
+  "name": "web-api",
+  "version": "1.0.0",
+  "description": "Serverless CRUD service for goodemporium.com",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "serverless": "^1.27.3",
+    "serverless-python-requirements": "^4.1.0"
+  }
+}

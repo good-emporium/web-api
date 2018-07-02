@@ -2,8 +2,7 @@ version: 2
 
 defaults: &defaults
   docker:
-    - image: circleci/python:3.6
-  working_directory: /go/src/github.com/good-emporium/web-api
+    - image: circleci/python:3.6-stretch-node
 
 persist_to_workspace: &persist_to_workspace
   persist_to_workspace:
@@ -15,68 +14,69 @@ attach_workspace: &attach_workspace
   attach_workspace:
     at: .
 
-install_node_and_serverless: &install_node_and_serverless
-  run:
-    name: Installing node and serverless
-    command: |
-      pushd /tmp
-      curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-      sudo apt-get install -y nodejs
-      sudo apt-get install build-essential libssl-dev
-      sudo npm i -g serverless
-      popd
-restore_go_cache: &restore_go_cache
+restore_py_cache: &restore_py_cache
   restore_cache:
-    key: go-cache
+    key: py-cache-
 
 restore_node_cache: &restore_node_cache
   restore_cache:
-    key: node-cache
+    key: node-cache-
 
-save_go_cache: &save_go_cache
+save_py_cache: &save_py_cache
   save_cache:
-    key: go-cache
+    key: py-cache-{{ checksum "requirements.dev.txt" }}
     paths:
-      - /go/pkg
+      - /usr/local/lib/python3.6/site-packages
+      - ~/.cache/pip
 
 save_node_cache: &save_node_cache
   save_cache:
-    key: node-cache
+    key: node-cache-{{ checksum "package-lock.json" }}
     paths:
-      - ./node_modules
-# TODO ensure path above is correct
+      - node_modules
 
 jobs:
   build:
     <<: *defaults
     steps:
       - checkout
-      - *restore_go_cache
-      - make
-      - *save_go_cache
+      - *restore_py_cache
+      - sudo pip install -r requirements.dev.txt
+      - *save_py_cache
       - *persist_to_workspace
+
+  deploy_dev:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - *restore_node_cache
+      - run: npm install
+      - *save_node_cache
+      - run:
+          name: Deploy to the dev environment (just testing circle here)
+          command: serverless deploy --stage v0-dev
 
   deploy_staging:
     <<: *defaults
     steps:
       - *attach_workspace
       - *restore_node_cache
-      - *install_node_and_serverless
+      - run: npm install
       - *save_node_cache
       - run:
           name: Deploy to the staging environment
-          command: sls deploy --stage v0-staging
+          command: serverless deploy --stage v0-dev
 
   deploy_prod:
     <<: *defaults
     steps:
       - *attach_workspace
       - *restore_node_cache
-      - *install_node_and_serverless
+      - run: npm install
       - *save_node_cache
       - run:
           name: Deploy to the prod environment
-          command: sls deploy --stage v0
+          command: serverless deploy --stage v0
 
 workflows:
   version: 2
@@ -86,6 +86,15 @@ workflows:
           filters:
             tags:
               only: /.*/
+
+      - deploy_dev_testing_circle_remove_me:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
+            tags:
+              ignore: /^v.*/
 
       - deploy_staging:
           requires:

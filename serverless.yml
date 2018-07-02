@@ -4,9 +4,17 @@ provider:
   name: aws
   region: us-east-2
   runtime: python3.6
+  memorySize: 128
+  timeout: 10
+
+  deploymentBucket:
+    name: good-emporium-artifacts
+    serverSideEncryption: AES256
 
   environment:
+    ENVIRONMENT: p
     REGION: "us-east-2"
+    TABLE_ORGANIZATIONS: ${opt:stage, self:provider.stage}-organizations
 
   iamRoleStatements:
     - Effect: Allow
@@ -20,52 +28,80 @@ provider:
       Resource: "arn:aws:dynamodb:us-east-2:*:table/*"
 
 package:
- exclude:
-   - ./**
- include:
-   - ./bin/**
+  include:
+    - organizations/*.py
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
 
 functions:
-  create:
-    handler: bin/organization/create
+  list:
+    handler: organizations/handler.ls
     events:
       - http:
-          path: organization/create
-          method: post
-          cors:
-            origins:
-            - '*'
-  get-organization:
-    handler: bin/organization/get
-    events:
-      - http:
-          path: organization/get
+          path: organizations
           method: get
           cors:
             origins:
             - '*'
-  get-organizations:
-      handler: bin/organization/get-multiple
-      events:
-        - http:
-            path: organization/get-multiple
-            method: get
-            cors:
-              origins:
-              - '*'
+
+  create:
+    handler: organizations/handler.create
+    events:
+      - http:
+          path: organizations
+          method: post
+          cors:
+            origins:
+            - '*'
+
+  retrieve:
+    handler: organizations/handler.retrieve
+    events:
+      - http:
+          path: organizations/{id}
+          method: get
+          cors:
+            origins:
+            - '*'
+
+  update:
+    handler: organizations/handler.update
+    events:
+      - http:
+          path: organizations/{id}
+          method: put
+          cors:
+            origins:
+            - '*'
+
+  delete:
+    handler: organizations/handler.delete
+    events:
+      - http:
+          path: organizations/{id}
+          method: delete
+          cors:
+            origins:
+            - '*'
 
 resources:
   Resources:
-    organizationsTable:
+    OrganizationsTable:
       Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
       Properties:
-        TableName: Organizations
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
+        TableName: ${self:provider.environment.TABLE_ORGANIZATIONS}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
