@@ -16,11 +16,11 @@ attach_workspace: &attach_workspace
 
 restore_py_cache: &restore_py_cache
   restore_cache:
-    key: py-cache-
+    key: py-cache-{{ checksum "requirements.dev.txt" }}
 
 restore_node_cache: &restore_node_cache
   restore_cache:
-    key: node-cache-
+    key: node-cache-{{ checksum "package-lock.json" }}
 
 save_py_cache: &save_py_cache
   save_cache:
@@ -45,7 +45,7 @@ jobs:
       - *save_py_cache
       - *persist_to_workspace
 
-  deploy_dev:
+  deploy_dev_testing_circle_remove_me:
     <<: *defaults
     steps:
       - *attach_workspace
