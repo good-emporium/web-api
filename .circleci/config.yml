@@ -16,7 +16,7 @@ attach_workspace: &attach_workspace
 
 restore_py_cache: &restore_py_cache
   restore_cache:
-    key: py-cache-{{ checksum "requirements.dev.txt" }}
+    key: python-cache-{{ checksum "requirements.dev.txt" }}
 
 restore_node_cache: &restore_node_cache
   restore_cache:
@@ -24,7 +24,7 @@ restore_node_cache: &restore_node_cache
 
 save_py_cache: &save_py_cache
   save_cache:
-    key: py-cache-{{ checksum "requirements.dev.txt" }}
+    key: python-cache-{{ checksum "requirements.dev.txt" }}
     paths:
       - /usr/local/lib/python3.6/site-packages
       - /root/.cache/pip
