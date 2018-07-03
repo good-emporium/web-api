@@ -14,13 +14,18 @@ attach_workspace: &attach_workspace
   attach_workspace:
     at: .
 
+install_serverless: &install_serverless
+  run:
+    name: Installing Serverless
+    command: sudo npm install -g
+
 jobs:
   build:
     <<: *defaults
     steps:
       - checkout
       - run:
-          name: Install the Python dependencies
+          name: Installing the Python dependencies
           command: sudo pip install -r requirements.dev.txt
       - *persist_to_workspace
 
@@ -28,9 +33,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - run:
-          name: Install Serverless
-          command: npm install -g
+      - *install_serverless
       - run:
           name: Deploy to the dev environment (just testing circle here)
           command: serverless deploy --stage v0-dev
@@ -39,9 +42,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - run:
-          name: Install Serverless
-          command: npm install -g
+      - *install_serverless
       - run:
           name: Deploy to the staging environment
           command: serverless deploy --stage v0-dev
@@ -50,9 +51,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - run:
-          name: Install Serverless
-          command: npm install -g
+      - *install_serverless
       - run:
           name: Deploy to the prod environment
           command: serverless deploy --stage v0
