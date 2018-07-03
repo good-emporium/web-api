@@ -40,7 +40,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-#      - *restore_py_cache
+      - *restore_py_cache
       - run:
           name: Install the Python dependencies
           command: |
