@@ -14,49 +14,23 @@ attach_workspace: &attach_workspace
   attach_workspace:
     at: .
 
-restore_py_cache: &restore_py_cache
-  restore_cache:
-    key: python-cache-{{ checksum "requirements.dev.txt" }}
-
-restore_node_cache: &restore_node_cache
-  restore_cache:
-    key: node-cache-{{ checksum "package-lock.json" }}
-
-save_py_cache: &save_py_cache
-  save_cache:
-    key: python-cache-{{ checksum "requirements.dev.txt" }}
-    paths:
-      - /usr/local/lib/python3.6/site-packages
-      - /root/.cache/pip
-
-save_node_cache: &save_node_cache
-  save_cache:
-    key: node-cache-{{ checksum "package-lock.json" }}
-    paths:
-      - node_modules
-
 jobs:
   build:
     <<: *defaults
     steps:
       - checkout
-      - *restore_py_cache
       - run:
           name: Install the Python dependencies
-          command: |
-            sudo pip install -r requirements.dev.txt
-            sudo chmod -R 777 /usr/local/lib/python3.6/
-            sudo chmod -R 777 /root/.cache/pip
-      - *save_py_cache
+          command: sudo pip install -r requirements.dev.txt
       - *persist_to_workspace
 
   deploy_dev_testing_circle_remove_me:
     <<: *defaults
     steps:
       - *attach_workspace
-      - *restore_node_cache
-      - run: npm install
-      - *save_node_cache
+      - run:
+          name: Install Serverless
+          command: npm install -g
       - run:
           name: Deploy to the dev environment (just testing circle here)
           command: serverless deploy --stage v0-dev
@@ -65,9 +39,9 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - *restore_node_cache
-      - run: npm install
-      - *save_node_cache
+      - run:
+          name: Install Serverless
+          command: npm install -g
       - run:
           name: Deploy to the staging environment
           command: serverless deploy --stage v0-dev
@@ -76,9 +50,9 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - *restore_node_cache
-      - run: npm install
-      - *save_node_cache
+      - run:
+          name: Install Serverless
+          command: npm install -g
       - run:
           name: Deploy to the prod environment
           command: serverless deploy --stage v0
