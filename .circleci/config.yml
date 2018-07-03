@@ -41,7 +41,7 @@ jobs:
     steps:
       - checkout
       - *restore_py_cache
-      - sudo pip install -r requirements.dev.txt
+      - run: sudo pip install -r requirements.dev.txt
       - *save_py_cache
       - *persist_to_workspace
 

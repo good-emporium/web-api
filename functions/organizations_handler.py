@@ -4,7 +4,7 @@ from datetime import datetime
 
 from pynamodb.exceptions import DoesNotExist, DeleteError
 
-from organizations import OrganizationModel
+from functions import OrganizationModel
 
 
 # TODO add pagination

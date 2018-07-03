@@ -9,7 +9,7 @@ provider:
 
   deploymentBucket:
     name: good-emporium-artifacts
-    serverSideEncryption: AES256
+    serverSideEncryption: KMS
 
   environment:
     ENVIRONMENT: p
@@ -29,7 +29,7 @@ provider:
 
 package:
   include:
-    - organizations/*.py
+    - functions/*.py
 
 plugins:
   - serverless-python-requirements
@@ -40,7 +40,7 @@ custom:
 
 functions:
   list:
-    handler: organizations/handler.ls
+    handler: functions/organizations_handler.ls
     events:
       - http:
           path: organizations
@@ -50,7 +50,7 @@ functions:
             - '*'
 
   create:
-    handler: organizations/handler.create
+    handler: functions/organizations_handler.create
     events:
       - http:
           path: organizations
@@ -60,7 +60,7 @@ functions:
             - '*'
 
   retrieve:
-    handler: organizations/handler.retrieve
+    handler: functions/organizations_handler.retrieve
     events:
       - http:
           path: organizations/{id}
@@ -70,7 +70,7 @@ functions:
             - '*'
 
   update:
-    handler: organizations/handler.update
+    handler: functions/organizations_handler.update
     events:
       - http:
           path: organizations/{id}
@@ -80,7 +80,7 @@ functions:
             - '*'
 
   delete:
-    handler: organizations/handler.delete
+    handler: functions/organizations_handler.delete
     events:
       - http:
           path: organizations/{id}

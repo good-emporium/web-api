@@ -30,5 +30,10 @@ class OrganizationModel(Model):
 
     @staticmethod
     def get_slug(name):
+        """
+        The slug is a URL-friendly identifier for an organization.
+
+        Converts 'My Cool Company' into 'my-cool-company'
+        """
         name = name.lower()
         return re.sub(r'[\W_]+', '-', name)
