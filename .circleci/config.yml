@@ -27,7 +27,7 @@ save_py_cache: &save_py_cache
     key: py-cache-{{ checksum "requirements.dev.txt" }}
     paths:
       - /usr/local/lib/python3.6/site-packages
-      - ~/.cache/pip
+      - /root/.cache/pip
 
 save_node_cache: &save_node_cache
   save_cache:
@@ -40,8 +40,13 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - *restore_py_cache
-      - run: sudo pip install -r requirements.dev.txt
+#      - *restore_py_cache
+      - run:
+          name: Install the Python dependencies
+          command: |
+            sudo pip install -r requirements.dev.txt
+            sudo chmod -R 777 /usr/local/lib/python3.6/
+            sudo chmod -R 777 /root/.cache/pip
       - *save_py_cache
       - *persist_to_workspace
 
