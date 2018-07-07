@@ -9,7 +9,7 @@ from functions import OrganizationModel
 
 # TODO add pagination
 # TODO return just the columns needed, vs everything
-def ls(event, context):
+def ls():
     """Returns all of the organizations in the DB."""
 
     results = OrganizationModel.scan()
@@ -20,9 +20,7 @@ def ls(event, context):
     }
 
 
-def create(event, context):
-    data = json.loads(event['body'])
-
+def create(body):
     # TODO add data validation
     # if not validate_organization(data):
     #     logging.error('')
@@ -31,10 +29,10 @@ def create(event, context):
     #         'body': json.dumps({'error_message': ''})
     #     }
 
-    organization = OrganizationModel(id=OrganizationModel.get_slug(data['name']),
+    organization = OrganizationModel(id=OrganizationModel.get_slug(body['name']),
                                      active=True,
-                                     name=data['name'],
-                                     description=data['description'],
+                                     name=body['name'],
+                                     description=body['description'],
                                      createdAt=datetime.now())
     organization.save()
 
@@ -43,9 +41,13 @@ def create(event, context):
     }
 
 
-def retrieve(event, context):
+def replace(body):
+    pass
+
+
+def retrieve(org_id):
     try:
-        organization = OrganizationModel.get(hash_key=event['path']['id'])
+        organization = OrganizationModel.get(hash_key=org_id)
     except DoesNotExist:
         return {
             'statusCode': 404,
@@ -58,9 +60,7 @@ def retrieve(event, context):
     }
 
 
-def update(event, context):
-    data = json.loads(event['body'])
-
+def update(body):
     # TODO add data validation
     # if not validate_organization(data):
     #     logging.error('')
@@ -70,7 +70,7 @@ def update(event, context):
     #     }
 
     try:
-        organization = OrganizationModel.get(hash_key=event['path']['id'])
+        organization = OrganizationModel.get(hash_key=body['path']['id'])
     except DoesNotExist:
         return {
             'statusCode': 404,
@@ -97,9 +97,9 @@ def update(event, context):
     }
 
 
-def delete(event, context):
+def delete(org_id):
     try:
-        organization = OrganizationModel.get(hash_key=event['path']['id'])
+        organization = OrganizationModel.get(hash_key=org_id)
     except DoesNotExist:
         return {
             'statusCode': 404,

@@ -39,8 +39,23 @@ custom:
     dockerizePip: non-linux
 
 functions:
-  list:
-    handler: functions/organizations_handler.ls
+  get-jwt-token:
+    handler: functions/lambda_handler.token
+    events:
+      - http:
+          path: token
+          method: get
+          request:
+            parameters:
+              querystrings:
+                username: true
+                password: true
+          cors:
+            origins:
+            - '*'
+
+  list-organizations:
+    handler: functions/lambda_handler.list_organizations
     events:
       - http:
           path: organizations
@@ -49,8 +64,8 @@ functions:
             origins:
             - '*'
 
-  create:
-    handler: functions/organizations_handler.create
+  create-organization:
+    handler: functions/lambda_handler.create_organization
     events:
       - http:
           path: organizations
@@ -59,32 +74,54 @@ functions:
             origins:
             - '*'
 
-  retrieve:
-    handler: functions/organizations_handler.retrieve
+  replace-organization:
+    handler: functions/lambda_handler.replace_organization
     events:
       - http:
-          path: organizations/{id}
-          method: get
-          cors:
-            origins:
-            - '*'
-
-  update:
-    handler: functions/organizations_handler.update
-    events:
-      - http:
-          path: organizations/{id}
+          path: organizations
           method: put
           cors:
             origins:
             - '*'
 
-  delete:
-    handler: functions/organizations_handler.delete
+  retrieve-organization:
+    handler: functions/lambda_handler.retrieve_organization
+    events:
+      - http:
+          path: organizations/{id}
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origins:
+            - '*'
+
+  update-organization:
+    handler: functions/lambda_handler.update_organization
+    events:
+      - http:
+          path: organizations/{id}
+          method: patch
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origins:
+            - '*'
+
+  delete-organization:
+    handler: functions/lambda_handler.delete_organization
     events:
       - http:
           path: organizations/{id}
           method: delete
+          request:
+            parameters:
+              paths:
+                id: true
           cors:
             origins:
             - '*'

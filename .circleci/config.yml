@@ -41,6 +41,12 @@ jobs:
           command: sudo pip install -r requirements.dev.txt
       - *persist_to_workspace
 
+  test:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - pytest
+
   deploy_dev_testing_circle_remove_me:
     <<: *defaults
     steps:
@@ -76,21 +82,30 @@ jobs:
 
 workflows:
   version: 2
-  build-deploy:
+  build-test-deploy:
     jobs:
       - build:
           filters:
             tags:
               only: /.*/
 
-      - deploy_dev_testing_circle_remove_me:
-          requires:
-            - build
-          filters:
-            branches:
-              ignore: master
-            tags:
-              ignore: /^v.*/
+#      - test:
+#          requires:
+#            - build
+#          filters:
+#            branches:
+#              ignore: master
+#            tags:
+#              ignore: /^v.*/
+#
+#      - deploy_dev_testing_circle_remove_me:
+#          requires:
+#            - build
+#          filters:
+#            branches:
+#              ignore: master
+#            tags:
+#              ignore: /^v.*/
 
       - deploy_staging:
           requires:

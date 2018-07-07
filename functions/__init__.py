@@ -2,7 +2,7 @@ import os
 import re
 from datetime import datetime
 
-from pynamodb.attributes import BooleanAttribute, UnicodeAttribute, UTCDateTimeAttribute
+from pynamodb.attributes import UnicodeAttribute, UTCDateTimeAttribute
 from pynamodb.models import Model
 
 
@@ -18,7 +18,7 @@ class OrganizationModel(Model):
             host = 'http://localhost:8000'
 
     id = UnicodeAttribute(hash_key=True)
-    active = BooleanAttribute()
+    # active = BooleanAttribute()
     name = UnicodeAttribute()
     description = UnicodeAttribute()
     createdAt = UTCDateTimeAttribute(default=datetime.now())
