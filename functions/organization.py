@@ -10,8 +10,7 @@ from functions import OrganizationModel
 # TODO add pagination
 # TODO return just the columns needed, vs everything
 def ls():
-    """Returns all of the organizations in the DB."""
-
+    """Return all of the organizations in the DB."""
     results = OrganizationModel.scan()
 
     return {
@@ -78,13 +77,13 @@ def update(body):
         }
 
     todo_changed = False
-    if 'name' in data and data['name'] != organization.name:
+    if 'name' in body and body['name'] != organization.name:
         # TODO change the slug. Since it's the hash key, old entry needs to be deleted & a new one created.
         # When recreating, use the original creation date
-        organization.name = data['name']
+        organization.name = body['name']
         todo_changed = True
-    if 'description' in data and data['description'] != organization.description:
-        organization.description = data['description']
+    if 'description' in body and body['description'] != organization.description:
+        organization.description = body['description']
         todo_changed = True
 
     if todo_changed:

@@ -4,25 +4,33 @@ from functions import auth, organization
 
 
 def token(event, context):
-    """Receives a username and password, and returns a JWT token"""
+    """Receive a username and password, and return a JWT token"""
     username = event['query']['username']
     password = event['query']['password']
 
-    return auth.token(username, password)
+    return auth.encode_token(username, password)
 
 
 def list_organizations(event, context):
-    """Returns all of the organizations in the DB."""
+    """Return all of the organizations in the DB."""
     return organization.ls()
 
 
 def create_organization(event, context):
-    body = json.loads(event['body'])
+    raw_body = json.loads(event['body'])
+    body = {
+        'name': raw_body['body']['name'],
+        'description': raw_body['body']['name'],
+    }
     return organization.create(body)
 
 
 def replace_organization(event, context):
-    body = json.loads(event['body'])
+    raw_body = json.loads(event['body'])
+    body = {
+        'name': raw_body['body']['name'],
+        'description': raw_body['body']['name'],
+    }
     return organization.replace(body)
 
 

@@ -1,0 +1,10 @@
+[REPORTS]
+
+# Tells whether to display a full report or only the messages
+reports=yes
+
+
+[FORMAT]
+
+# Maximum number of characters on a single line.
+max-line-length=120

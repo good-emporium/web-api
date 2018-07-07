@@ -15,6 +15,7 @@ provider:
     ENVIRONMENT: p
     REGION: "us-east-2"
     TABLE_ORGANIZATIONS: ${opt:stage, self:provider.stage}-organizations
+    JWT_SECRET: ${opt:jwt_secret, 'secret'}
 
   iamRoleStatements:
     - Effect: Allow

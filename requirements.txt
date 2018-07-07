@@ -1,1 +1,2 @@
+pyjwt==1.6.4
 pynamodb==3.3.0

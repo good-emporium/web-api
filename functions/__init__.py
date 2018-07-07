@@ -8,9 +8,9 @@ from pynamodb.models import Model
 
 class OrganizationModel(Model):
     class Meta:
-        table_name = os.getenv('TABLE_ORGANIZATIONS')
-
+        table_name = os.getenv('TABLE_ORGANIZATIONS', 'dev-organizations')
         env = os.getenv('ENVIRONMENT', 'd')
+
         if env == 'p':
             region = os.getenv('REGION')
             host = f'https://dynamodb.{region}.amazonaws.com'
@@ -21,11 +21,11 @@ class OrganizationModel(Model):
     # active = BooleanAttribute()
     name = UnicodeAttribute()
     description = UnicodeAttribute()
-    createdAt = UTCDateTimeAttribute(default=datetime.now())
-    updatedAt = UTCDateTimeAttribute()
+    created_at = UTCDateTimeAttribute(default=datetime.now())
+    updated_at = UTCDateTimeAttribute()
 
-    def save(self, conditional_operator=None, **expected_values):
-        self.updatedAt = datetime.now()
+    def save(self, condition=None, conditional_operator=None, **expected_values):
+        self.updated_at = datetime.now()
         super(OrganizationModel, self).save()
 
     @staticmethod
