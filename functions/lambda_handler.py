@@ -3,12 +3,15 @@ import json
 from functions import auth, organization
 
 
-def token(event, context):
+def encode_token(event, context):
     """Receive a username and password, and return a JWT token"""
     username = event['query']['username']
     password = event['query']['password']
-
     return auth.encode_token(username, password)
+
+
+def authorize(event, context):
+    return auth.authenticate_user(event['headers']['Authorization'])
 
 
 def list_organizations(event, context):
@@ -17,33 +20,21 @@ def list_organizations(event, context):
 
 
 def create_organization(event, context):
-    raw_body = json.loads(event['body'])
-    body = {
-        'name': raw_body['body']['name'],
-        'description': raw_body['body']['name'],
-    }
+    body = json.loads(event['body'])
     return organization.create(body)
 
 
-def replace_organization(event, context):
-    raw_body = json.loads(event['body'])
-    body = {
-        'name': raw_body['body']['name'],
-        'description': raw_body['body']['name'],
-    }
-    return organization.replace(body)
-
-
 def retrieve_organization(event, context):
-    org_id = event['path']['id']
-    return organization.retrieve(org_id)
+    key = event['path']['id']
+    return organization.retrieve(key)
 
 
 def update_organization(event, context):
-    org_id = event['path']['id']
-    return organization.retrieve(org_id)
+    key = event['path']['id']
+    body = json.loads(event['body'])
+    return organization.update(key, body)
 
 
 def delete_organization(event, context):
-    org_id = event['path']['id']
-    return organization.delete(org_id)
+    key = event['path']['id']
+    return organization.delete(key)

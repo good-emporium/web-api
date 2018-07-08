@@ -5,13 +5,13 @@ def create(body):
     pass
 
 
-def retrieve(userid):
+def retrieve(key):
     pass
 
 
-def update(body):
+def update(key, body):
     pass
 
 
-def delete(userid):
+def delete(key):
     pass

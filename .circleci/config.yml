@@ -45,7 +45,9 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - pytest
+      - run:
+          name: Testing all the things
+          command: make test
 
   deploy_dev_testing_circle_remove_me:
     <<: *defaults

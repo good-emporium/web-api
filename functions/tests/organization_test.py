@@ -1,3 +1,7 @@
+import pytest
+
+from functions import OrganizationModel, organization
+
 TEST_DATA = [
     {
         'name': 'ACME, Inc.',
@@ -8,3 +12,18 @@ TEST_DATA = [
         'description': 'BFFs for life!',
     },
 ]
+
+SLUG_TEST_DATA = (
+    ('My Cool Company', 'my-cool-company'),
+    ('Tall Castles, Inc.', 'tall-castles-inc'),
+    ('Oohs-n-Ahhs,LLC', 'oohs-n-ahhs-llc')
+)
+
+
+@pytest.mark.parametrize("formal_name,expected", SLUG_TEST_DATA)
+def test_slug_generation(formal_name, expected):
+    assert OrganizationModel.get_slug(formal_name) == expected
+
+
+def test_create():
+    pass

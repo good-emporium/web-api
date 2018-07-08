@@ -36,4 +36,5 @@ class OrganizationModel(Model):
         Converts 'My Cool Company' into 'my-cool-company'
         """
         name = name.lower()
+        name = re.sub(r'[\W_]$', '', name)
         return re.sub(r'[\W_]+', '-', name)

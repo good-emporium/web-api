@@ -40,8 +40,11 @@ custom:
     dockerizePip: non-linux
 
 functions:
+  authorizer:
+    handler: functions/lambda_handler.authorize
+
   get-jwt-token:
-    handler: functions/lambda_handler.token
+    handler: functions/lambda_handler.encode_token
     events:
       - http:
           path: token
@@ -71,16 +74,6 @@ functions:
       - http:
           path: organizations
           method: post
-          cors:
-            origins:
-            - '*'
-
-  replace-organization:
-    handler: functions/lambda_handler.replace_organization
-    events:
-      - http:
-          path: organizations
-          method: put
           cors:
             origins:
             - '*'
@@ -143,3 +136,5 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        SSESpecification:
+          SSEEnabled: true

@@ -13,7 +13,7 @@ class AuthenticationError(BaseException):
 
 
 # TODO check user info against Users table in DynamoDB
-def _authenticate_user(username, password):
+def _authenticate_credentials(username, password):
     if username == 'test_user' and password == 'abc123':
         return {
             'username': username,
@@ -30,7 +30,7 @@ def _token_expiration_time():
 
 def encode_token(username, password):
     """Receives a username and password, and returns a JWT token"""
-    user = _authenticate_user(username, password)
+    user = _authenticate_credentials(username, password)
 
     claims = {
         **user,
@@ -40,6 +40,10 @@ def encode_token(username, password):
     return {'token': jwt.encode(claims, JWT_SECRET, JWT_ALGORITHM).decode()}
 
 
-def decode_token(token):
+def _decode_token(token):
     claims = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
     return claims
+
+
+def authenticate_user(token):
+    return True
