@@ -1,4 +1,7 @@
 *.iml
 
 .idea
-vendor
+.pytest_cache
+.serverless
+__pycache__
+node_modules

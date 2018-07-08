@@ -1,0 +1,139 @@
+service: web-api
+
+provider:
+  name: aws
+  region: us-east-2
+  runtime: python3.6
+  memorySize: 128
+  timeout: 10
+
+  deploymentBucket:
+    name: good-emporium-artifacts
+
+  environment:
+    ENVIRONMENT: p
+    REGION: "us-east-2"
+    TABLE_ORGANIZATIONS: organizations
+    JWT_SECRET: ${opt:jwt_secret, 'secret'}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-2:*:table/*"
+
+package:
+  include:
+    - functions/*.py
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+functions:
+  authorizer:
+    handler: functions/lambda_handler.authorize
+
+  get-jwt-token:
+    handler: functions/lambda_handler.encode_token
+    events:
+      - http:
+          path: token
+          method: get
+          request:
+            parameters:
+              querystrings:
+                username: true
+                password: true
+          cors:
+            origins:
+            - '*'
+
+  list-organizations:
+    handler: functions/lambda_handler.list_organizations
+    events:
+      - http:
+          path: organizations
+          method: get
+          cors:
+            origins:
+            - '*'
+
+  create-organization:
+    handler: functions/lambda_handler.create_organization
+    events:
+      - http:
+          path: organizations
+          method: post
+          cors:
+            origins:
+            - '*'
+
+  retrieve-organization:
+    handler: functions/lambda_handler.retrieve_organization
+    events:
+      - http:
+          path: organizations/{id}
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origins:
+            - '*'
+
+  update-organization:
+    handler: functions/lambda_handler.update_organization
+    events:
+      - http:
+          path: organizations/{id}
+          method: patch
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origins:
+            - '*'
+
+  delete-organization:
+    handler: functions/lambda_handler.delete_organization
+    events:
+      - http:
+          path: organizations/{id}
+          method: delete
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origins:
+            - '*'
+
+resources:
+  Resources:
+    OrganizationsTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.TABLE_ORGANIZATIONS}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        SSESpecification:
+          SSEEnabled: true
