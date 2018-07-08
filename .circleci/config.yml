@@ -2,7 +2,7 @@ version: 2
 
 defaults: &defaults
   docker:
-    - image: circleci/python:3.6-stretch-node
+    - image: circleci/python:3.6-stretch-node-browsers
 
 persist_to_workspace: &persist_to_workspace
   persist_to_workspace:
@@ -31,6 +31,17 @@ install_node_dependencies: &install_node_dependencies
       sudo npm install -g serverless
       npm install
 
+run_tests: &run_tests
+  run:
+    name: Testing all the things
+    command: |
+      pushd home/circleci
+      wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest.tar.gz -q -O - | tar -xz
+      nohup java -jar DynamoDBLocal.jar &
+      sleep 5
+      popd
+      pytest
+
 jobs:
   build:
     <<: *defaults
@@ -45,9 +56,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - run:
-          name: Testing all the things
-          command: make test
+      - *run_tests
 
 #  deploy_dev_testing_circle_remove_me:
 #    <<: *defaults
