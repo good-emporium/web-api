@@ -9,6 +9,7 @@ from pynamodb.exceptions import DeleteError, DoesNotExist
 def ls(model):
     """Return all of the organizations in the DB."""
     results = model.scan()
+    print(results)
 
     return {
         'statusCode': 200,
@@ -16,22 +17,13 @@ def ls(model):
     }
 
 
-# TODO what happens on dupe slug?
-def create(model, body):
-    entry = model(body)
+# TODO don't add dupe
+def create_or_replace(model, body):
+    entry = model(**body)
     entry.save()
 
     return {
         'statusCode': 201
-    }
-
-
-def replace(model, key, body):
-    delete(model, key)
-    create(model, body)
-
-    return {
-        'statusCode': 200
     }
 
 
@@ -41,7 +33,7 @@ def retrieve(model, key):
     except DoesNotExist:
         return {
             'statusCode': 404,
-            'body': json.dumps({'error_message': 'Organization not found'})
+            'body': json.dumps({'error_message': f"'{key}' not found"})
         }
 
     return {
@@ -57,7 +49,7 @@ def update(model, key, body):
     except DoesNotExist:
         return {
             'statusCode': 404,
-            'body': json.dumps({'error_message': 'Organization not found'})
+            'body': json.dumps({'error_message': f"'{key}' not found"})
         }
 
     key_changed = False
@@ -68,17 +60,17 @@ def update(model, key, body):
             # TODO check if it's a key and set key_changed if needed
             # if it's a key:
             #     key_changed = True
-            entry[k] = body[k]
+            setattr(entry, k, body[k])
             field_changed = True
 
     # If there are new fields, perform the update
     for k in body:
         if k not in entry:
-            entry[k] = body[k]
+            setattr(entry, k, body[k])
             field_changed = True
 
     if key_changed:
-        return replace(model, key, entry)
+        return create_or_replace(model, body)
     elif field_changed:
         entry.save()
     else:

@@ -28,6 +28,10 @@ class OrganizationModel(Model):
         self.updated_at = datetime.now()
         super(OrganizationModel, self).save()
 
+    def __iter__(self):
+        for name, attr in self.get_attributes().items():
+            yield name, attr.serialize(getattr(self, name))
+
     @staticmethod
     def get_slug(name):
         """

@@ -35,11 +35,11 @@ def _validate_organization(body):
 def create(body):
     body = _prep_body(body)
     body['created_at'] = datetime.now()
-    return dynamodb.create(OrganizationModel, body)
+    return dynamodb.create_or_replace(OrganizationModel, body)
 
 
 def retrieve(key):
-    return dynamodb.update(OrganizationModel, key)
+    return dynamodb.retrieve(OrganizationModel, key)
 
 
 def update(key, body):
