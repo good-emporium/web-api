@@ -9,12 +9,11 @@ provider:
 
   deploymentBucket:
     name: good-emporium-artifacts
-    serverSideEncryption: KMS
 
   environment:
     ENVIRONMENT: p
     REGION: "us-east-2"
-    TABLE_ORGANIZATIONS: ${opt:stage, self:provider.stage}-organizations
+    TABLE_ORGANIZATIONS: organizations
     JWT_SECRET: ${opt:jwt_secret, 'secret'}
 
   iamRoleStatements:

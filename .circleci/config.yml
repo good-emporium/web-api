@@ -49,16 +49,16 @@ jobs:
           name: Testing all the things
           command: make test
 
-  deploy_dev_testing_circle_remove_me:
-    <<: *defaults
-    steps:
-      - *attach_workspace
-      - *restore_node_cache
-      - *install_node_dependencies
-      - *save_node_cache
-      - run:
-          name: Deploy to the dev environment (just testing circle here)
-          command: serverless deploy --stage v0-dev
+#  deploy_dev_testing_circle_remove_me:
+#    <<: *defaults
+#    steps:
+#      - *attach_workspace
+#      - *restore_node_cache
+#      - *install_node_dependencies
+#      - *save_node_cache
+#      - run:
+#          name: Deploy to the dev environment (just testing circle here)
+#          command: serverless deploy --verbose --stage v0-dev
 
   deploy_staging:
     <<: *defaults
@@ -69,7 +69,7 @@ jobs:
       - *save_node_cache
       - run:
           name: Deploy to the staging environment
-          command: serverless deploy --stage v0-dev
+          command: serverless deploy --verbose --stage v0-dev
 
   deploy_prod:
     <<: *defaults
@@ -80,7 +80,7 @@ jobs:
       - *save_node_cache
       - run:
           name: Deploy to the prod environment
-          command: serverless deploy --stage v0 --jwt_secret ${JWT_SECRET}
+          command: serverless deploy --verbose --stage v0 --jwt_secret ${JWT_SECRET}
 
 workflows:
   version: 2
