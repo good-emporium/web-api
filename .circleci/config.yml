@@ -45,15 +45,15 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - run:
-          name: Installing the Python dependencies
-          command: sudo pip install -r requirements.dev.txt
       - *persist_to_workspace
 
   test:
     <<: *defaults
     steps:
       - *attach_workspace
+      - run:
+          name: Installing the Python dependencies
+          command: sudo pip install -r requirements.dev.txt
       - *run_tests
 
 #  deploy_dev_testing_circle_remove_me:
