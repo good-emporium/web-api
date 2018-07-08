@@ -35,11 +35,9 @@ run_tests: &run_tests
   run:
     name: Testing all the things
     command: |
-      pushd home/circleci
       wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest.tar.gz -q -O - | tar -xz
       nohup java -jar DynamoDBLocal.jar &
       sleep 5
-      popd
       pytest
 
 jobs:
