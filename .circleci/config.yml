@@ -56,17 +56,6 @@ jobs:
           command: sudo pip install -r requirements.dev.txt
       - *run_tests
 
-  deploy_dev_testing_circle_remove_me:
-    <<: *defaults
-    steps:
-      - *attach_workspace
-      - *restore_node_cache
-      - *install_node_dependencies
-      - *save_node_cache
-      - run:
-          name: Deploy to the dev environment (just testing circle here)
-          command: serverless deploy --verbose --stage v0-dev
-
   deploy_staging:
     <<: *defaults
     steps:
@@ -99,15 +88,6 @@ workflows:
               only: /.*/
 
       - test:
-          requires:
-            - build
-          filters:
-            branches:
-              ignore: master
-            tags:
-              ignore: /^v.*/
-
-      - deploy_dev_testing_circle_remove_me:
           requires:
             - build
           filters:
