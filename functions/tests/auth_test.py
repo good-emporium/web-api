@@ -18,6 +18,11 @@ FAILING_TEST_DATA = (
 )
 
 
+# TODO remove this
+def test_fail():
+    pytest.fail()
+
+
 # TODO add a fixture (add fake user to DB)
 @pytest.mark.parametrize('username,password', FAILING_TEST_DATA)
 def test_incorrect_credentials_raises_exception(username, password):

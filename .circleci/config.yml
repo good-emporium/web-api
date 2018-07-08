@@ -91,15 +91,15 @@ workflows:
             tags:
               only: /.*/
 
-#      - test:
-#          requires:
-#            - build
-#          filters:
-#            branches:
-#              ignore: master
-#            tags:
-#              ignore: /^v.*/
-#
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
+            tags:
+              ignore: /^v.*/
+
 #      - deploy_dev_testing_circle_remove_me:
 #          requires:
 #            - build
