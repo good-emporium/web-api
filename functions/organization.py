@@ -11,13 +11,13 @@ def ls():
 
 
 def _prep_body(body):
-    name = body['name'].trim() if 'name' in body else None
-    description = body['description'].trim() if 'description' in body else None
+    name = body['name'].strip() if 'name' in body else None
+    description = body['description'].strip() if 'description' in body else None
     if not _validate_organization(body):
-        logging.error("Organization didn't pass validation")
+        logging.error(f"'{name}' didn't pass validation")
         return {
             'statusCode': 422,
-            'body': json.dumps({'error_message': "Organization didn't pass validation"})
+            'body': json.dumps({'error_message': f"'{name}' didn't pass validation"})
         }
 
     return {
@@ -29,13 +29,13 @@ def _prep_body(body):
 
 # TODO add validation
 def _validate_organization(body):
-    pass
+    return True
 
 
 def create(body):
     body = _prep_body(body)
     body['created_at'] = datetime.now()
-    return dynamodb.create_or_replace(OrganizationModel, body)
+    return dynamodb.create(OrganizationModel, body)
 
 
 def retrieve(key):
@@ -43,7 +43,6 @@ def retrieve(key):
 
 
 def update(key, body):
-    body = _prep_body(body)
     return dynamodb.update(OrganizationModel, key, body)
 
 

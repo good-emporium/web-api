@@ -19,7 +19,7 @@ FAILING_TEST_DATA = (
 
 
 # TODO add a fixture (add fake user to DB)
-@pytest.mark.parametrize("username,password", FAILING_TEST_DATA)
+@pytest.mark.parametrize('username,password', FAILING_TEST_DATA)
 def test_incorrect_credentials_raises_exception(username, password):
     with pytest.raises(auth.AuthenticationError):
         auth.encode_token(username, password)

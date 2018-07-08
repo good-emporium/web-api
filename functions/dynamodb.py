@@ -18,7 +18,7 @@ def ls(model):
 
 
 # TODO don't add dupe
-def create_or_replace(model, body):
+def create(model, body):
     entry = model(**body)
     entry.save()
 
@@ -52,27 +52,26 @@ def update(model, key, body):
             'body': json.dumps({'error_message': f"'{key}' not found"})
         }
 
-    key_changed = False
-    field_changed = False
+    keys_changed = False
+    fields_changed = False
 
     for k in entry:
         if k in body and body[k] != entry[k]:
-            # TODO check if it's a key and set key_changed if needed
-            # if it's a key:
-            #     key_changed = True
             setattr(entry, k, body[k])
-            field_changed = True
+            fields_changed = True
 
     # If there are new fields, perform the update
     for k in body:
+        if k == 'id':
+            keys_changed = True
         if k not in entry:
             setattr(entry, k, body[k])
-            field_changed = True
+            fields_changed = True
 
-    if key_changed:
-        return create_or_replace(model, body)
-    elif field_changed:
+    if fields_changed:
         entry.save()
+        if keys_changed:
+            delete(model, key)
     else:
         logging.info('Nothing changed, not updating')
 
