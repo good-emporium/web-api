@@ -53,6 +53,11 @@ def test_create(organization_empty_table, entry):
     assert organization.create(entry)['statusCode'] == 201
 
 
+def test_create_many(organization_empty_table):
+    entries = ORGANIZATION_TEST_DATA
+    assert organization.create_many(entries)['statusCode'] == 201
+
+
 def test_ls(organization_full_table):
     assert organization.ls()['statusCode'] == 200
 

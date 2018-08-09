@@ -24,6 +24,11 @@ def create_organization(event, context):
     return organization.create(body)
 
 
+def create_organizations(event, context):
+    body = json.loads(event['body'])
+    return organization.create_many(body)
+
+
 def retrieve_organization(event, context):
     key = event['path']['id']
     return organization.retrieve(key)

@@ -16,7 +16,7 @@ $ pip install -r requirements.dev.txt
 $ npm install
 ```
 
-* You'll also need to set up your AWS credentials. Ask your local admin for a set, if needed. Store them locally with:
+* You'll also need to set up your AWS credentials. Ask your local admin for a set. Store them locally with:
 ```bash
 $ aws configure
 ```
