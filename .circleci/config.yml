@@ -76,7 +76,7 @@ jobs:
       - *save_node_cache
       - run:
           name: Deploy to the prod environment
-          command: serverless deploy --verbose --stage v0 --jwt_secret ${JWT_SECRET}
+          command: serverless deploy --verbose --stage v0 --jwt_secret ${JWT_SECRET} --env p
 
 workflows:
   version: 2

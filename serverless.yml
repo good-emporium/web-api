@@ -11,9 +11,9 @@ provider:
     name: good-emporium-artifacts
 
   environment:
-    ENVIRONMENT: p
+    ENVIRONMENT: ${opt:env, 'd'}
     REGION: "us-east-2"
-    TABLE_ORGANIZATIONS: organizations
+    TABLE_ORGANIZATIONS: ${self:provider.environment.ENVIRONMENT}-organizations
     JWT_SECRET: ${opt:jwt_secret, 'secret'}
 
   iamRoleStatements:
