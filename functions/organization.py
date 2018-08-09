@@ -45,6 +45,12 @@ def create_many(body):
             'body': json.dumps({'error_message': 'Only 100 organizations can be created at a time'})
         }
 
+    if not isinstance(body, list):
+        return {
+            'statusCode': 422,
+            'body': json.dumps({'error_message': 'This endpoint requires a list of organizations'})
+        }
+
     for organization in body:
         organization = _prep(organization)
         organization['created_at'] = datetime.now()

@@ -3,7 +3,7 @@ import pytest
 from functions import OrganizationModel, organization
 
 
-ORGANIZATION_TEST_DATA = ({
+ORGANIZATION_TEST_DATA = [{
     # slug: acme-inc
     'name': 'ACME, Inc.',
     'description': 'Apparently, we make a ton of TNT.',
@@ -11,7 +11,7 @@ ORGANIZATION_TEST_DATA = ({
     # slug: pals-forever-llc
     'name': 'Pals Forever, LLC',
     'description': 'BFFs for life!',
-})
+}]
 
 SLUG_TEST_DATA = (
     ('My Cool Company', 'my-cool-company'),
@@ -54,8 +54,11 @@ def test_create(organization_empty_table, entry):
 
 
 def test_create_many(organization_empty_table):
-    entries = ORGANIZATION_TEST_DATA
-    assert organization.create_many(entries)['statusCode'] == 201
+    assert organization.create_many(ORGANIZATION_TEST_DATA)['statusCode'] == 201
+
+
+def test_create_many_requires_an_iterable(organization_empty_table):
+    assert organization.create_many(ORGANIZATION_TEST_DATA[0])['statusCode'] == 422
 
 
 def test_ls(organization_full_table):
