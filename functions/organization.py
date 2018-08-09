@@ -10,10 +10,10 @@ def ls():
     return dynamodb.ls(OrganizationModel)
 
 
-def _prep_body(body):
-    name = body['name'].strip() if 'name' in body else None
-    description = body['description'].strip() if 'description' in body else None
-    if not _validate_organization(body):
+def _prep(organization):
+    name = organization['name'].strip() if 'name' in organization else None
+    description = organization['description'].strip() if 'description' in organization else None
+    if not _validate(organization):
         logging.error(f"'{name}' didn't pass validation")
         return {
             'statusCode': 422,
@@ -28,14 +28,40 @@ def _prep_body(body):
 
 
 # TODO add validation
-def _validate_organization(body):
+def _validate(organization):
     return True
 
 
 def create(body):
-    body = _prep_body(body)
-    body['created_at'] = datetime.now()
-    return dynamodb.create(OrganizationModel, body)
+    organization = _prep(body)
+    organization['created_at'] = datetime.now()
+    return dynamodb.create(OrganizationModel, organization)
+
+
+def create_many(body):
+    if len(body) > 100:
+        return {
+            'statusCode': 422,
+            'body': json.dumps({'error_message': 'Only 100 organizations can be created at a time'})
+        }
+
+    if not isinstance(body, list):
+        return {
+            'statusCode': 422,
+            'body': json.dumps({'error_message': 'This endpoint requires a list of organizations'})
+        }
+
+    for organization in body:
+        organization = _prep(organization)
+        organization['created_at'] = datetime.now()
+        r = dynamodb.create(OrganizationModel, organization)
+
+        if r['statusCode'] != 201:
+            return r
+
+    return {
+        'statusCode': 201
+    }
 
 
 def retrieve(key):

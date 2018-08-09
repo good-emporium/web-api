@@ -77,6 +77,16 @@ functions:
             origins:
             - '*'
 
+  create-organizations:
+    handler: functions/lambda_handler.create_organizations
+    events:
+    - http:
+        path: organizations/many
+        method: post
+        cors:
+          origins:
+          - '*'
+
   retrieve-organization:
     handler: functions/lambda_handler.retrieve_organization
     events:

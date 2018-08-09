@@ -20,8 +20,8 @@ def _authenticate_credentials(username, password):
             'first_name': 'Test',
             'last_name': 'User',
         }
-    else:
-        raise AuthenticationError
+
+    raise AuthenticationError
 
 
 def _token_expiration_time():
