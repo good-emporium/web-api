@@ -8,11 +8,11 @@ from pynamodb.models import Model
 
 class OrganizationModel(Model):
     class Meta:
-        table_name = os.getenv('TABLE_ORGANIZATIONS', 'dev-organizations')
-        env = os.getenv('ENVIRONMENT', 'd')
+        table_name = os.getenv('TABLE_ORGANIZATIONS', 'd-organizations')
+        env = os.getenv('CLOUD_ENV')
 
-        if env == 'p':
-            region = os.getenv('REGION')
+        if env:
+            region = os.getenv('CLOUD_REGION')
             host = f'https://dynamodb.{region}.amazonaws.com'
         else:
             host = 'http://localhost:8000'

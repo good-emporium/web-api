@@ -57,8 +57,9 @@ def test_create_many(organization_empty_table):
     assert organization.create_many(ORGANIZATION_TEST_DATA)['statusCode'] == 201
 
 
-def test_create_many_requires_an_iterable(organization_empty_table):
-    assert organization.create_many(ORGANIZATION_TEST_DATA[0])['statusCode'] == 422
+@pytest.mark.parametrize('entry', (ORGANIZATION_TEST_DATA[0], 'arbitrary_string'))
+def test_create_many_requires_a_list(organization_empty_table, entry):
+    assert organization.create_many(entry)['statusCode'] == 422
 
 
 def test_ls(organization_full_table):

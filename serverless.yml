@@ -11,10 +11,10 @@ provider:
     name: good-emporium-artifacts
 
   environment:
-    ENVIRONMENT: ${opt:env, 'd'}
-    REGION: "us-east-2"
-    TABLE_ORGANIZATIONS: ${self:provider.environment.ENVIRONMENT}-organizations
+    CLOUD_ENV: ${opt:env, 'd'}
+    CLOUD_REGION: "us-east-2"
     JWT_SECRET: ${opt:jwt_secret, 'secret'}
+    TABLE_ORGANIZATIONS: ${self:provider.environment.CLOUD_ENV}-organizations
 
   iamRoleStatements:
     - Effect: Allow
@@ -128,22 +128,3 @@ functions:
           cors:
             origins:
             - '*'
-
-resources:
-  Resources:
-    OrganizationsTable:
-      Type: AWS::DynamoDB::Table
-      DeletionPolicy: Retain
-      Properties:
-        TableName: ${self:provider.environment.TABLE_ORGANIZATIONS}
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        SSESpecification:
-          SSEEnabled: true
