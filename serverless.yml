@@ -128,22 +128,3 @@ functions:
           cors:
             origins:
             - '*'
-
-resources:
-  Resources:
-    OrganizationsTable:
-      Type: AWS::DynamoDB::Table
-      DeletionPolicy: Retain
-      Properties:
-        TableName: ${self:provider.environment.TABLE_ORGANIZATIONS}
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        SSESpecification:
-          SSEEnabled: true
