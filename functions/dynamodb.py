@@ -5,7 +5,7 @@ from pynamodb.exceptions import DeleteError, DoesNotExist
 
 
 # TODO add pagination
-# TODO return just the columns needed, vs everything
+# TODO return just the columns needed, vs everything; use an index
 def ls(model):
     """Return all of the organizations in the DB."""
     results = model.scan()
@@ -62,7 +62,7 @@ def update(model, key, body):
 
     # If there are new fields, perform the update
     for k in body:
-        if k == 'id':
+        if k == 'id':  # This assumes that 'id' is the only Dynamo primary key
             keys_changed = True
         if k not in entry:
             setattr(entry, k, body[k])

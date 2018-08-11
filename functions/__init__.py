@@ -24,6 +24,7 @@ class OrganizationModel(Model):
     created_at = UTCDateTimeAttribute(default=datetime.now())
     updated_at = UTCDateTimeAttribute()
 
+    # TODO add a try/except here and return the error (rather than fail)
     def save(self, condition=None, conditional_operator=None, **expected_values):
         self.updated_at = datetime.now()
         super(OrganizationModel, self).save()

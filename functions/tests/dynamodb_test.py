@@ -7,7 +7,7 @@ from functions import dynamodb
 
 class SupervillainModel(Model):
     class Meta:
-        table_name = 'dev-supervillains'
+        table_name = 'd-supervillains'
         host = 'http://localhost:8000'
 
     id = UnicodeAttribute(hash_key=True)
