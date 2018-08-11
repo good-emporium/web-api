@@ -26,3 +26,8 @@ You can lint the project and run the tests with:
 $ make lint
 $ make test
 ```
+
+You can deploy to the dev environment with:
+```bash
+serverless deploy --verbose --stage v0-dev
+```

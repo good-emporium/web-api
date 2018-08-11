@@ -19,6 +19,7 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - dynamodb:DescribeTable
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
@@ -86,6 +87,16 @@ functions:
         cors:
           origins:
           - '*'
+
+#  update-organizations:
+#    handler: functions/lambda_handler.update_organizations
+#    events:
+#    - http:
+#        path: organizations/many
+#        method: patch
+#        cors:
+#          origins:
+#          - '*'
 
   retrieve-organization:
     handler: functions/lambda_handler.retrieve_organization
