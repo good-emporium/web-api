@@ -141,6 +141,16 @@ functions:
             origins:
             - '*'
 
+  create-user:
+    handler: functions/lambda_handler.create_user
+    events:
+      - http:
+          path: users
+          method: post
+          cors:
+            origins:
+            - '*'
+
   change-email:
     handler: functions/lambda_handler.change_email
     events:
