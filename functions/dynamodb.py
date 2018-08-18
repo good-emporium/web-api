@@ -27,6 +27,18 @@ def create(model, body):
     }
 
 
+# TODO make use of the batch operations
+# https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
+# def create_many(model, body):
+#     with model.batch_write() as batch:
+#         entry = model(**body)
+#         batch.save(entry)
+#
+#     return {
+#         'statusCode': 201
+#     }
+
+
 def retrieve(model, key):
     try:
         entry = model.get(hash_key=key)

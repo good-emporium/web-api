@@ -1,6 +1,6 @@
 import json
 
-from functions import auth, organization
+from functions import auth, organization, user
 
 
 def encode_token(event, context):
@@ -43,3 +43,14 @@ def update_organization(event, context):
 def delete_organization(event, context):
     key = event['path']['id']
     return organization.delete(key)
+
+
+def create_user(event, context):
+    body = json.loads(event['body'])
+    return organization.create(body)
+
+
+def change_email(event, context):
+    username = event['path']['id']
+    body = json.loads(event['body'])
+    return user.change_email(username, body)

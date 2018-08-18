@@ -1,5 +1,6 @@
 -r requirements.txt
 
+awscli==1.15.81
 boto3==1.7.62
 pylint==2.1.1
 pytest==3.7.1

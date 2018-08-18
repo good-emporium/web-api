@@ -15,6 +15,7 @@ provider:
     CLOUD_REGION: "us-east-2"
     JWT_SECRET: ${opt:jwt_secret, 'secret'}
     TABLE_ORGANIZATIONS: ${self:provider.environment.CLOUD_ENV}-organizations
+    TABLE_USERS: ${self:provider.environment.CLOUD_ENV}-users
 
   iamRoleStatements:
     - Effect: Allow
@@ -139,3 +140,27 @@ functions:
           cors:
             origins:
             - '*'
+
+  create-user:
+    handler: functions/lambda_handler.create_user
+    events:
+      - http:
+          path: users
+          method: post
+          cors:
+            origins:
+            - '*'
+
+  change-email:
+    handler: functions/lambda_handler.change_email
+    events:
+    - http:
+        path: users/{id}/email
+        method: patch
+        request:
+          parameters:
+            paths:
+              id: true
+        cors:
+          origins:
+          - '*'
