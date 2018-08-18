@@ -29,5 +29,5 @@ $ make test
 
 You can deploy to the dev environment with:
 ```bash
-serverless deploy --verbose --stage v0-dev
+make deploy-dev
 ```

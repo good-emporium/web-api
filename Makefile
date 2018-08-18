@@ -1,3 +1,6 @@
+deploy-dev:
+	serverless deploy --verbose --stage v0-dev
+
 lint:
 	pylint functions
 
