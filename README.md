@@ -13,6 +13,7 @@ $ pip install -r requirements.dev.txt
 
 * Install the Node dependencies:
 ```bash
+$ sudo npm install -g serverless
 $ npm install
 ```
 
