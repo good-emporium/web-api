@@ -45,6 +45,6 @@ def delete_organization(event, context):
     return organization.delete(key)
 
 def change_email(event, context):
-    key = event['path']['id']
+    username = event['path']['id']
     body = json.loads(event['body'])
-    return user.change_email(key, body)
+    return user.change_email(username, body)

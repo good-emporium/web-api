@@ -21,7 +21,7 @@ UPDATE_TEST_DATA = (
 )
 
 EMAIL_CHANGE_TEST_DATA = (
-    ('dash', {'email': 'beav@ge.com'}),
+    ['dash', {'email': 'beav@ge.com'}],
     ('jen', {'email': 'backender@ge.com'}),
 )
 
@@ -51,4 +51,8 @@ def test_create(user_empty_table, entry):
 
 @pytest.mark.parametrize('entry', EMAIL_CHANGE_TEST_DATA)
 def test_email_change(user_full_table, entry):
-    assert user.change_email(entry)['statusCode'] == 201
+    assert user.change_email(entry[0], entry[1])['statusCode'] == 200
+
+
+def test_email_change_must_have_a_valid_email_address(user_full_table):
+    assert user.change_email('jen', {})['statusCode'] == 422

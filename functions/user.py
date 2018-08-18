@@ -45,7 +45,12 @@ def delete(key):
     pass
 
 
-def change_email(key, body):
-    # get email from body
-    pass
+def change_email(username, body):
+    email = body['email'] if 'email' in body else None
+    if not email:
+        return {
+            'statusCode': 422,
+            'body': json.dumps({'error_message': 'Email needs to be included'})
+        }
 
+    return dynamodb.update(UserModel, username, body)
