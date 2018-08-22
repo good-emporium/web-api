@@ -155,12 +155,12 @@ functions:
     handler: functions/lambda_handler.change_email
     events:
     - http:
-        path: users/{id}/email
+        path: users/{username}/email
         method: patch
         request:
           parameters:
             paths:
-              id: true
+              username: true
         cors:
           origins:
           - '*'

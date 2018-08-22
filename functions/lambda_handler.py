@@ -47,10 +47,10 @@ def delete_organization(event, context):
 
 def create_user(event, context):
     body = json.loads(event['body'])
-    return organization.create(body)
+    return user.create(body)
 
 
 def change_email(event, context):
-    username = event['path']['id']
+    username = event['path']['username']
     body = json.loads(event['body'])
     return user.change_email(username, body)

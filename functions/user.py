@@ -5,8 +5,8 @@ from functions import UserModel, dynamodb
 
 
 def _validate_and_prep(user):
-    userid = user['id'].strip() if 'id' in user else None
-    if not userid:
+    username = user['username'].strip() if 'username' in user else None
+    if not username:
         return {'error_message': 'Missing the username'}
 
     display_name = user['display_name'].strip() if 'display_name' in user else None
@@ -14,7 +14,7 @@ def _validate_and_prep(user):
     bio = user['bio'].strip() if 'bio' in user else None
 
     return {
-        'id': userid,
+        'username': username,
         'display_name': display_name,
         'email': email,
         'bio': bio,
