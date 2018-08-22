@@ -4,12 +4,12 @@ from functions import UserModel, user
 
 
 USER_TEST_DATA = [{
-    'id': 'dash',
+    'username': 'dash',
     'display_name': 'Dashiel Lopez Mendez',
     'email': 'dash@ge.com',
     'bio': 'Busy little beaver.',
 }, {
-    'id': 'jen',
+    'username': 'jen',
     'display_name': 'Jen Udan',
     'email': 'jen@ge.com',
     'bio': 'New backender!',
