@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from functions import OrganizationModel, dynamodb
+from functions import OrganizationModel, dynamodb, utils
 
 
 def ls():
@@ -14,13 +14,37 @@ def _validate_and_prep(organization):
     if not name:
         return {'error_message': 'Organization is missing a name'}
 
-    description = organization['description'].strip() if 'description' in organization else None
+    fields = (
+        'description',
+        'annual_net_income',
+        'net_profit',
+        'annual_sales_actual',
+        'net_worth',
+        'email',
+        'address',
+        'company_type',
+        'duns_number',
+        'num_employees_this_site',
+        'num_employees_all_sites',
+        'one_year_employee_growth',
+        'companywebsite',
+        'irs_ein',
+        'latitude',
+        'longitude',
+        'location_type',
+        'year_of_founding',
+        'minority_or_women_owned',
+        'phone_number',
+        'prescreen_score',
+        'primary_industry',
+        'primary_naics_code',
+        'primary_sic_code',
+        'subsidiary_status',
+    )
 
-    return {
-        'id': OrganizationModel.get_slug(name),
-        'name': name,
-        'description': description
-    }
+    clean_values = utils.validate_and_prep(organization, fields)
+    clean_values['id'] = OrganizationModel.get_slug(clean_values['name'])
+    return clean_values
 
 
 def create(body):

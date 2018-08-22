@@ -5,12 +5,13 @@ from functions import UserModel, user
 
 USER_TEST_DATA = [{
     'username': 'dash',
-    'display_name': 'Dashiel Lopez Mendez',
+    'first_name': 'Dashiel',
+    'last_name': 'Lopez Mendez',
     'email': 'dash@ge.com',
     'bio': 'Busy little beaver.',
 }, {
     'username': 'jen',
-    'display_name': 'Jen Udan',
+    'first_name': 'Jen',
     'email': 'jen@ge.com',
     'bio': 'New backender!',
 }]
