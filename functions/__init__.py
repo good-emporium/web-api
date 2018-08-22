@@ -6,14 +6,14 @@ from pynamodb.attributes import UnicodeAttribute, UTCDateTimeAttribute
 from pynamodb.models import Model
 
 
-class GEModel(Model):
+class GenericModel(Model):
     created_at = UTCDateTimeAttribute(default=datetime.now())
     updated_at = UTCDateTimeAttribute()
 
     # TODO add a try/except here and return the error (rather than fail)
     def save(self, condition=None, conditional_operator=None, **expected_values):
         self.updated_at = datetime.now()
-        super(GEModel, self).save()
+        super(GenericModel, self).save()
 
     def __iter__(self):
         for name, attr in self.get_attributes().items():
@@ -29,7 +29,7 @@ class GenericMeta:
         host = 'http://localhost:8000'
 
 
-class OrganizationModel(GEModel):
+class OrganizationModel(GenericModel):
     class Meta(GenericMeta):
         table_name = os.getenv('TABLE_ORGANIZATIONS', 'd-organizations')
 
@@ -50,7 +50,7 @@ class OrganizationModel(GEModel):
         return re.sub(r'[\W_]+', '-', name)
 
 
-class UserModel(GEModel):
+class UserModel(GenericModel):
     class Meta(GenericMeta):
         table_name = os.getenv('TABLE_USERS', 'd-users')
 
