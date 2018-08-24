@@ -32,35 +32,37 @@ class GenericMeta:
 class OrganizationModel(GenericModel):
     class Meta(GenericMeta):
         table_name = os.getenv('TABLE_ORGANIZATIONS', 'd-organizations')
-
-    id = UnicodeAttribute(hash_key=True)
-    # active = BooleanAttribute()
-    name = UnicodeAttribute()
-    description = UnicodeAttribute()
-    annual_net_income = NumberAttribute()
-    net_profit = NumberAttribute()
-    annual_sales_actual = NumberAttribute()
-    net_worth = NumberAttribute()
-    email = UnicodeAttribute()
-    address = UnicodeAttribute()
-    company_type = UnicodeAttribute()
-    duns_number = NumberAttribute()
-    num_employees_this_site = NumberAttribute()
-    num_employees_all_sites = NumberAttribute()
-    one_year_employee_growth = UnicodeAttribute()
-    companywebsite = UnicodeAttribute()
-    irs_ein = UnicodeAttribute()
-    latitude = NumberAttribute()
-    longitude = NumberAttribute()
-    location_type = UnicodeAttribute()
-    year_of_founding = NumberAttribute()
-    minority_or_women_owned = BooleanAttribute()
-    phone_number = UnicodeAttribute()
-    prescreen_score = UnicodeAttribute()
-    primary_industry = UnicodeAttribute()
-    primary_naics_code = UnicodeAttribute()
-    primary_sic_code = UnicodeAttribute()
-    subsidiary_status = BooleanAttribute()
+        
+    columns = (
+        ('id', UnicodeAttribute(hash_key=True)),
+        # ('active', BooleanAttribute()),
+        ('name', UnicodeAttribute()),
+        ('description', UnicodeAttribute()),
+        ('annual_net_income', NumberAttribute()),
+        ('net_profit', NumberAttribute()),
+        ('annual_sales_actual', NumberAttribute()),
+        ('net_worth', NumberAttribute()),
+        ('email', UnicodeAttribute()),
+        ('address', UnicodeAttribute()),
+        ('company_type', UnicodeAttribute()),
+        ('duns_number', NumberAttribute()),
+        ('num_employees_this_site', NumberAttribute()),
+        ('num_employees_all_sites', NumberAttribute()),
+        ('one_year_employee_growth', UnicodeAttribute()),
+        ('companywebsite', UnicodeAttribute()),
+        ('irs_ein', UnicodeAttribute()),
+        ('latitude', NumberAttribute()),
+        ('longitude', NumberAttribute()),
+        ('location_type', UnicodeAttribute()),
+        ('year_of_founding', NumberAttribute()),
+        ('minority_or_women_owned', BooleanAttribute()),
+        ('phone_number', UnicodeAttribute()),
+        ('prescreen_score', UnicodeAttribute()),
+        ('primary_industry', UnicodeAttribute()),
+        ('primary_naics_code', UnicodeAttribute()),
+        ('primary_sic_code', UnicodeAttribute()),
+        ('subsidiary_status', BooleanAttribute()),
+    )
 
     @staticmethod
     def get_slug(name):
@@ -78,16 +80,18 @@ class UserModel(GenericModel):
     class Meta(GenericMeta):
         table_name = os.getenv('TABLE_USERS', 'd-users')
 
-    username = UnicodeAttribute(hash_key=True)
-    # active = BooleanAttribute()
-    first_name = UnicodeAttribute()
-    middle_name = UnicodeAttribute()
-    last_name = UnicodeAttribute()
-    email = UnicodeAttribute()
-    bio = UnicodeAttribute()
-    phone = UnicodeAttribute()
-    street_address = UnicodeAttribute()
-    city = UnicodeAttribute()
-    state = UnicodeAttribute()
-    zip_code = UnicodeAttribute()
-    user_roles = UnicodeSetAttribute(null=True)
+    columns = (
+        ('username', UnicodeAttribute(hash_key=True))
+        # ('active', BooleanAttribute())
+        ('first_name', UnicodeAttribute())
+        ('middle_name', UnicodeAttribute())
+        ('last_name', UnicodeAttribute())
+        ('email', UnicodeAttribute())
+        ('bio', UnicodeAttribute())
+        ('phone', UnicodeAttribute())
+        ('street_address', UnicodeAttribute())
+        ('city', UnicodeAttribute())
+        ('state', UnicodeAttribute())
+        ('zip_code', UnicodeAttribute())
+        ('user_roles', UnicodeSetAttribute(null=True))
+    )
