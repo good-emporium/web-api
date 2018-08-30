@@ -14,7 +14,7 @@ ORGANIZATION_TEST_DATA = [{
 }, {
     'id': 'better-life-for-cats',
     'name': 'Better Life for Cats',
-    'description': 'BFFs for life!',
+    'description': 'Bringing a better life to kitties everywhere!',
 }]
 
 SEARCH_TEST_DATA = (
