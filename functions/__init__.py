@@ -10,6 +10,10 @@ class GenericModel(Model):
     created_at = UTCDateTimeAttribute(default=datetime.now())
     updated_at = UTCDateTimeAttribute()
 
+    def add_columns(self, columns):
+        for column in columns:
+            locals()[column[0]] = column[1]
+
     # TODO add a try/except here and return the error (rather than fail)
     def save(self, condition=None, conditional_operator=None, **expected_values):
         self.updated_at = datetime.now()
@@ -37,32 +41,33 @@ class OrganizationModel(GenericModel):
         ('id', UnicodeAttribute(hash_key=True)),
         # ('active', BooleanAttribute()),
         ('name', UnicodeAttribute()),
-        ('description', UnicodeAttribute()),
-        ('annual_net_income', NumberAttribute()),
-        ('net_profit', NumberAttribute()),
-        ('annual_sales_actual', NumberAttribute()),
-        ('net_worth', NumberAttribute()),
+        ('description', UnicodeAttribute(null=True)),
+        ('annual_net_income', NumberAttribute(null=True)),
+        ('net_profit', NumberAttribute(null=True)),
+        ('annual_sales_actual', NumberAttribute(null=True)),
+        ('net_worth', NumberAttribute(null=True)),
         ('email', UnicodeAttribute()),
-        ('address', UnicodeAttribute()),
-        ('company_type', UnicodeAttribute()),
-        ('duns_number', NumberAttribute()),
-        ('num_employees_this_site', NumberAttribute()),
-        ('num_employees_all_sites', NumberAttribute()),
-        ('one_year_employee_growth', UnicodeAttribute()),
-        ('companywebsite', UnicodeAttribute()),
-        ('irs_ein', UnicodeAttribute()),
-        ('latitude', NumberAttribute()),
-        ('longitude', NumberAttribute()),
-        ('location_type', UnicodeAttribute()),
-        ('year_of_founding', NumberAttribute()),
-        ('minority_or_women_owned', BooleanAttribute()),
-        ('phone_number', UnicodeAttribute()),
-        ('prescreen_score', UnicodeAttribute()),
-        ('primary_industry', UnicodeAttribute()),
-        ('primary_naics_code', UnicodeAttribute()),
-        ('primary_sic_code', UnicodeAttribute()),
-        ('subsidiary_status', BooleanAttribute()),
+        ('address', UnicodeAttribute(null=True)),
+        ('company_type', UnicodeAttribute(null=True)),
+        ('duns_number', NumberAttribute(null=True)),
+        ('num_employees_this_site', NumberAttribute(null=True)),
+        ('num_employees_all_sites', NumberAttribute(null=True)),
+        ('one_year_employee_growth', UnicodeAttribute(null=True)),
+        ('companywebsite', UnicodeAttribute(null=True)),
+        ('irs_ein', UnicodeAttribute(null=True)),
+        ('latitude', NumberAttribute(null=True)),
+        ('longitude', NumberAttribute(null=True)),
+        ('location_type', UnicodeAttribute(null=True)),
+        ('year_of_founding', NumberAttribute(null=True)),
+        ('minority_or_women_owned', BooleanAttribute(null=True)),
+        ('phone_number', UnicodeAttribute(null=True)),
+        ('prescreen_score', UnicodeAttribute(null=True)),
+        ('primary_industry', UnicodeAttribute(null=True)),
+        ('primary_naics_code', UnicodeAttribute(null=True)),
+        ('primary_sic_code', UnicodeAttribute(null=True)),
+        ('subsidiary_status', BooleanAttribute(null=True)),
     )
+    self.add_columns(columns)
 
     @staticmethod
     def get_slug(name):
@@ -81,17 +86,18 @@ class UserModel(GenericModel):
         table_name = os.getenv('TABLE_USERS', 'd-users')
 
     columns = (
-        ('username', UnicodeAttribute(hash_key=True))
-        # ('active', BooleanAttribute())
-        ('first_name', UnicodeAttribute())
-        ('middle_name', UnicodeAttribute())
-        ('last_name', UnicodeAttribute())
-        ('email', UnicodeAttribute())
-        ('bio', UnicodeAttribute())
-        ('phone', UnicodeAttribute())
-        ('street_address', UnicodeAttribute())
-        ('city', UnicodeAttribute())
-        ('state', UnicodeAttribute())
-        ('zip_code', UnicodeAttribute())
-        ('user_roles', UnicodeSetAttribute(null=True))
+        ('username', UnicodeAttribute(hash_key=True)),
+        # ('active', BooleanAttribute()),
+        ('first_name', UnicodeAttribute(null=True)),
+        ('middle_name', UnicodeAttribute(null=True)),
+        ('last_name', UnicodeAttribute(null=True)),
+        ('email', UnicodeAttribute()),
+        ('bio', UnicodeAttribute(null=True)),
+        ('phone', UnicodeAttribute(null=True)),
+        ('street_address', UnicodeAttribute(null=True)),
+        ('city', UnicodeAttribute(null=True)),
+        ('state', UnicodeAttribute(null=True)),
+        ('zip_code', UnicodeAttribute(null=True)),
+        ('user_roles', UnicodeSetAttribute(null=True)),
     )
+    self.add_columns(columns)

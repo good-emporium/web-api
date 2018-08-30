@@ -1,30 +1,27 @@
 import pytest
 from pynamodb.attributes import BooleanAttribute, UnicodeAttribute
-from pynamodb.models import Model
 
-from functions import dynamodb
+from functions import GenericModel, dynamodb
 
 
-class SupervillainModel(Model):
+class SupervillainModel(GenericModel):
     class Meta:
         table_name = 'd-supervillains'
         host = 'http://localhost:8000'
 
-    id = UnicodeAttribute(hash_key=True)
-    active = BooleanAttribute()
-    name = UnicodeAttribute()
-    powers = UnicodeAttribute()
-
-    def __iter__(self):
-        for name, attr in self.get_attributes().items():
-            yield name, attr.serialize(getattr(self, name))
+    columns = (
+        ('id', UnicodeAttribute(hash_key=True)),
+        ('active', BooleanAttribute()),
+        ('name', UnicodeAttribute()),
+        ('powers', UnicodeAttribute(null=True)),
+    )
+    self.add_columns(columns)
 
 
 SUPERVILLAIN_TEST_DATA = ({
     'id': '37',
     'active': False,
     'name': 'Repo Man',
-    'powers': 'Handy with a knife, pretty good opera singer',
 }, {
     'id': '42',
     'active': True,
