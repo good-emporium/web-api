@@ -35,5 +35,5 @@ def organization_full_table():
 
 
 @pytest.mark.parametrize('search_terms,expected_results', SEARCH_TEST_DATA)
-def test_search(organization_full_table, search_terms, expected_results):
-    assert search.search(search_terms)['results'] == expected_results
+def test_search(organization_full_table, terms, expected_results):
+    assert search.query(terms)['results'] == expected_results
