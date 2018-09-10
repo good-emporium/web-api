@@ -10,35 +10,7 @@ def ls():
 
 
 def _validate_and_prep(organization):
-    fields = (
-        'name',
-        'description',
-        'annual_net_income',
-        'net_profit',
-        'annual_sales_actual',
-        'net_worth',
-        'email',
-        'address',
-        'company_type',
-        'duns_number',
-        'num_employees_this_site',
-        'num_employees_all_sites',
-        'one_year_employee_growth',
-        'companywebsite',
-        'irs_ein',
-        'latitude',
-        'longitude',
-        'location_type',
-        'year_of_founding',
-        'minority_or_women_owned',
-        'phone_number',
-        'prescreen_score',
-        'primary_industry',
-        'primary_naics_code',
-        'primary_sic_code',
-        'subsidiary_status',
-    )
-
+    fields = [c[0] for c in OrganizationModel.columns]
     clean_values = utils.validate_and_prep(organization, fields)
 
     if 'name' not in clean_values or not clean_values['name']:

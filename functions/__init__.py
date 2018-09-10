@@ -2,7 +2,8 @@ import os
 import re
 from datetime import datetime
 
-from pynamodb.attributes import BooleanAttribute, NumberAttribute, UnicodeAttribute, UTCDateTimeAttribute, UnicodeSetAttribute
+from pynamodb.attributes import BooleanAttribute, NumberAttribute, UnicodeAttribute, UTCDateTimeAttribute, \
+    UnicodeSetAttribute
 from pynamodb.models import Model
 
 
@@ -37,7 +38,11 @@ class OrganizationModel(GenericModel):
         ('id', UnicodeAttribute(hash_key=True)),
         # ('active', BooleanAttribute()),
         ('name', UnicodeAttribute()),
+        ('logo', UnicodeAttribute(null=True)),
         ('description', UnicodeAttribute(null=True)),
+        ('motto', UnicodeAttribute(null=True)),
+        ('mission_statement', UnicodeAttribute(null=True)),
+        ('founded', UnicodeAttribute(null=True)),
         ('annual_net_income', NumberAttribute(null=True)),
         ('net_profit', NumberAttribute(null=True)),
         ('annual_sales_actual', NumberAttribute(null=True)),
@@ -62,6 +67,9 @@ class OrganizationModel(GenericModel):
         ('primary_naics_code', UnicodeAttribute(null=True)),
         ('primary_sic_code', UnicodeAttribute(null=True)),
         ('subsidiary_status', BooleanAttribute(null=True)),
+        ('tags', UnicodeSetAttribute(null=True)),
+        ('examples', UnicodeSetAttribute(null=True)),
+        ('similar_companies', UnicodeSetAttribute(null=True)),
     )
     for column in columns:
         locals()[column[0]] = column[1]

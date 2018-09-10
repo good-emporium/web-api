@@ -5,20 +5,7 @@ from functions import UserModel, dynamodb, utils
 
 
 def _validate_and_prep(user):
-    fields = (
-        'username',
-        'email',
-        'bio',
-        'first_name',
-        'middle_name',
-        'last_name',
-        'phone',
-        'street_address',
-        'city',
-        'state',
-        'zip_code',
-    )
-
+    fields = [c[0] for c in UserModel.columns]
     clean_values = utils.validate_and_prep(user, fields)
 
     if 'username' not in clean_values and not clean_values['username']:
