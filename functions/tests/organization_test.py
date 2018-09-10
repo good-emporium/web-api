@@ -145,7 +145,3 @@ def test_retrieve(organization_full_table):
 @pytest.mark.parametrize('key,new_body_element', UPDATE_TEST_DATA)
 def test_update(organization_full_table, key, new_body_element):
     assert organization.update(key, new_body_element)['statusCode'] == 200
-
-
-def test_delete(organization_full_table):
-    assert organization.delete('acme-inc')['statusCode'] == 204

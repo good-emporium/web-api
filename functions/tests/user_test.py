@@ -58,10 +58,6 @@ def test_update(user_full_table, key, new_body_element):
     assert user.update(key, new_body_element)['statusCode'] == 200
 
 
-def test_delete(user_full_table):
-    assert user.delete('delete')['statusCode'] == 204
-
-
 @pytest.mark.parametrize('entry', EMAIL_CHANGE_TEST_DATA)
 def test_email_change(user_full_table, entry):
     assert user.change_email(entry[0], entry[1])['statusCode'] == 200

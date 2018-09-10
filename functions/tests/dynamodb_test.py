@@ -1,5 +1,5 @@
 import pytest
-from pynamodb.attributes import BooleanAttribute, UnicodeAttribute
+from pynamodb.attributes import BooleanAttribute, NumberAttribute, UnicodeAttribute
 
 from functions import GenericModel, dynamodb
 
@@ -14,14 +14,19 @@ class SupervillainModel(GenericModel):
         ('active', BooleanAttribute()),
         ('name', UnicodeAttribute()),
         ('powers', UnicodeAttribute(null=True)),
+        ('num_minions', NumberAttribute(null=True)),
+        ('score', NumberAttribute(null=True)),
     )
-    self.add_columns(columns)
+    for column in columns:
+        locals()[column[0]] = column[1]
 
 
 SUPERVILLAIN_TEST_DATA = ({
     'id': '37',
     'active': False,
     'name': 'Repo Man',
+    'num_minions': 12,
+    'score': -160,
 }, {
     'id': '42',
     'active': True,

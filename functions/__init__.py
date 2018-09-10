@@ -10,10 +10,6 @@ class GenericModel(Model):
     created_at = UTCDateTimeAttribute(default=datetime.now())
     updated_at = UTCDateTimeAttribute()
 
-    def add_columns(self, columns):
-        for column in columns:
-            locals()[column[0]] = column[1]
-
     # TODO add a try/except here and return the error (rather than fail)
     def save(self, condition=None, conditional_operator=None, **expected_values):
         self.updated_at = datetime.now()
@@ -52,7 +48,7 @@ class OrganizationModel(GenericModel):
         ('duns_number', NumberAttribute(null=True)),
         ('num_employees_this_site', NumberAttribute(null=True)),
         ('num_employees_all_sites', NumberAttribute(null=True)),
-        ('one_year_employee_growth', UnicodeAttribute(null=True)),
+        ('one_year_employee_growth', NumberAttribute(null=True)),
         ('companywebsite', UnicodeAttribute(null=True)),
         ('irs_ein', UnicodeAttribute(null=True)),
         ('latitude', NumberAttribute(null=True)),
@@ -67,7 +63,8 @@ class OrganizationModel(GenericModel):
         ('primary_sic_code', UnicodeAttribute(null=True)),
         ('subsidiary_status', BooleanAttribute(null=True)),
     )
-    self.add_columns(columns)
+    for column in columns:
+        locals()[column[0]] = column[1]
 
     @staticmethod
     def get_slug(name):
@@ -87,7 +84,7 @@ class UserModel(GenericModel):
 
     columns = (
         ('username', UnicodeAttribute(hash_key=True)),
-        # ('active', BooleanAttribute()),
+        ('active', BooleanAttribute(null=True)),
         ('first_name', UnicodeAttribute(null=True)),
         ('middle_name', UnicodeAttribute(null=True)),
         ('last_name', UnicodeAttribute(null=True)),
@@ -100,4 +97,5 @@ class UserModel(GenericModel):
         ('zip_code', UnicodeAttribute(null=True)),
         ('user_roles', UnicodeSetAttribute(null=True)),
     )
-    self.add_columns(columns)
+    for column in columns:
+        locals()[column[0]] = column[1]

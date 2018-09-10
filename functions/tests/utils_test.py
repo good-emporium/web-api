@@ -2,6 +2,7 @@ import pytest
 
 from functions import utils
 
+# TODO add some tests
 # SLUG_TEST_DATA = (
 #     ('My Cool Company', 'my-cool-company'),
 #     ('Tall Castles, Inc.', 'tall-castles-inc'),

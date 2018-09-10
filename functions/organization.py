@@ -41,7 +41,7 @@ def _validate_and_prep(organization):
 
     clean_values = utils.validate_and_prep(organization, fields)
 
-    if 'name' not in clean_values and not clean_values['name']:
+    if 'name' not in clean_values or not clean_values['name']:
         return {'error_message': 'Organization is missing a name'}
 
     clean_values['id'] = OrganizationModel.get_slug(clean_values['name'])
