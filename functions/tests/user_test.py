@@ -5,19 +5,20 @@ from functions import UserModel, user
 
 USER_TEST_DATA = [{
     'username': 'dash',
-    'display_name': 'Dashiel Lopez Mendez',
+    'first_name': 'Dashiel',
+    'last_name': 'Lopez Mendez',
     'email': 'dash@ge.com',
     'bio': 'Busy little beaver.',
 }, {
     'username': 'jen',
-    'display_name': 'Jen Udan',
+    'first_name': 'Jen',
     'email': 'jen@ge.com',
     'bio': 'New backender!',
 }]
 
 UPDATE_TEST_DATA = (
-    ('acme-inc', {'name': 'Cool Summer Breeze, LLC'}),
-    ('pals-forever-llc', {'id': 'sweet-nectar'}),
+    ('dash', {'bio': 'The human equivalent of a cool summer breeze.'}),
+    ('jen', {'username': 'jenudan'}),
 )
 
 EMAIL_CHANGE_TEST_DATA = (
@@ -47,6 +48,14 @@ def user_full_table():
 @pytest.mark.parametrize('entry', USER_TEST_DATA)
 def test_create(user_empty_table, entry):
     assert user.create(entry)['statusCode'] == 201
+
+def test_retrieve(user_full_table):
+    assert user.retrieve('dash')['statusCode'] == 200
+
+
+@pytest.mark.parametrize('key,new_body_element', UPDATE_TEST_DATA)
+def test_update(user_full_table, key, new_body_element):
+    assert user.update(key, new_body_element)['statusCode'] == 200
 
 
 @pytest.mark.parametrize('entry', EMAIL_CHANGE_TEST_DATA)

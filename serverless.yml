@@ -41,8 +41,8 @@ custom:
     dockerizePip: non-linux
 
 functions:
-  authorizer:
-    handler: functions/lambda_handler.authorize
+#  auth:
+#    handler: functions/lambda_handler.authorize
 
   get-jwt-token:
     handler: functions/lambda_handler.encode_token
@@ -75,6 +75,7 @@ functions:
       - http:
           path: organizations
           method: post
+#          authorizer: auth
           cors:
             origins:
             - '*'
@@ -85,6 +86,7 @@ functions:
     - http:
         path: organizations/many
         method: post
+#        authorizer: auth
         cors:
           origins:
           - '*'
@@ -119,6 +121,7 @@ functions:
       - http:
           path: organizations/{id}
           method: patch
+#          authorizer: auth
           request:
             parameters:
               paths:
@@ -133,6 +136,7 @@ functions:
       - http:
           path: organizations/{id}
           method: delete
+#          authorizer: auth
           request:
             parameters:
               paths:
@@ -157,6 +161,7 @@ functions:
     - http:
         path: users/{username}/email
         method: patch
+#        authorizer: auth
         request:
           parameters:
             paths:

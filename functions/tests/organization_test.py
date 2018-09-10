@@ -7,10 +7,58 @@ ORGANIZATION_TEST_DATA = [{
     # slug: acme-inc
     'name': 'ACME, Inc.',
     'description': 'Apparently, we make a ton of TNT.',
+    'annual_net_income': 300000,
+    'net_profit': 300000,
+    'annual_sales_actual': 300000,
+    'net_worth': 300000,
+    'email': 'hi@acme.com',
+    'address': '6633 E HWY 290, Suite 212 Austin, TX 78723',
+    'company_type': 'Non-Public',
+    'duns_number': 624031824,
+    'num_employees_this_site': 10,
+    'num_employees_all_sites': 20,
+    'one_year_employee_growth': 0,
+    'companywebsite': 'http://acme-inc.com',
+    'irs_ein': '54-2767876',
+    'latitude': 30.5784,
+    'longitude': -97.257423,
+    'location_type': 'Single Location',
+    'year_of_founding': 2005,
+    'minority_or_women_owned': False,
+    'phone_number': '543-567-8643',
+    'prescreen_score': 'High Risk',
+    'primary_industry': 'Social Assistance',
+    'primary_naics_code': '624190: Other Individual and Family Services',
+    'primary_sic_code': '83220600: General counseling services',
+    'subsidiary_status': False,
 }, {
     # slug: pals-forever-llc
     'name': 'Pals Forever, LLC',
     'description': 'BFFs for life!',
+    'annual_net_income': 500000,
+    'net_profit': 500000,
+    'annual_sales_actual': 500000,
+    'net_worth': 500000,
+    'email': 'support@pals-forever.com',
+    'address': '1640-A E. 2nd Street Austin, TX 78702',
+    'company_type': 'Non-Public',
+    'duns_number': 631824,
+    'num_employees_this_site': 15,
+    'num_employees_all_sites': 30,
+    'one_year_employee_growth': 0.24,
+    'companywebsite': 'bff.com',
+    'irs_ein': '54-2467476',
+    'latitude': 30.97358,
+    'longitude': -97.2458534,
+    'location_type': 'Headquarters',
+    'year_of_founding': 1894,
+    'minority_or_women_owned': True,
+    'phone_number': '502-469-4179',
+    'prescreen_score': 'Low Risk',
+    'primary_industry': 'Mental Health & Substance Abuse Services',
+    'primary_naics_code': '623220: Residential Mental Health and Substance Abuse Facilities',
+    'primary_sic_code': '83610302: Mentally handicapped home',
+    'subsidiary_status': True,
 }]
 
 SLUG_TEST_DATA = (
@@ -97,7 +145,3 @@ def test_retrieve(organization_full_table):
 @pytest.mark.parametrize('key,new_body_element', UPDATE_TEST_DATA)
 def test_update(organization_full_table, key, new_body_element):
     assert organization.update(key, new_body_element)['statusCode'] == 200
-
-
-def test_delete(organization_full_table):
-    assert organization.delete('acme-inc')['statusCode'] == 204

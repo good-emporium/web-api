@@ -1,24 +1,20 @@
 import json
 from datetime import datetime
 
-from functions import UserModel, dynamodb
+from functions import UserModel, dynamodb, utils
 
 
 def _validate_and_prep(user):
-    username = user['username'].strip() if 'username' in user else None
-    if not username:
+    fields = [c[0] for c in UserModel.columns]
+    clean_values = utils.validate_and_prep(user, fields)
+
+    if 'username' not in clean_values and not clean_values['username']:
         return {'error_message': 'Missing the username'}
 
-    display_name = user['display_name'].strip() if 'display_name' in user else None
-    email = user['email'].strip() if 'email' in user else None
-    bio = user['bio'].strip() if 'bio' in user else None
+    if 'email' not in clean_values and not clean_values['email']:
+        return {'error_message': 'Missing the email address'}
 
-    return {
-        'username': username,
-        'display_name': display_name,
-        'email': email,
-        'bio': bio,
-    }
+    return clean_values
 
 
 def create(body):
@@ -34,15 +30,15 @@ def create(body):
 
 
 def retrieve(key):
-    pass
+    return dynamodb.retrieve(UserModel, key)
 
 
 def update(key, body):
-    pass
+    return dynamodb.update(UserModel, key, body)
 
 
 def delete(key):
-    pass
+    return dynamodb.delete(UserModel, key)
 
 
 def change_email(username, body):

@@ -37,7 +37,7 @@ run_tests: &run_tests
     command: |
       wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest.tar.gz -q -O - | tar -xz
       nohup java -jar DynamoDBLocal.jar &
-      sleep 5
+      sleep 15
       pytest
 
 jobs:
@@ -65,7 +65,7 @@ jobs:
       - *save_node_cache
       - run:
           name: Deploy to the staging environment
-          command: serverless deploy --verbose --stage v0-dev
+          command: serverless deploy --verbose --stage v0-dev --jwt_secret ${DEV_JWT_SECRET}
 
   deploy_prod:
     <<: *defaults
@@ -76,7 +76,7 @@ jobs:
       - *save_node_cache
       - run:
           name: Deploy to the prod environment
-          command: serverless deploy --verbose --stage v0 --jwt_secret ${JWT_SECRET} --env p
+          command: serverless deploy --verbose --stage v0 --jwt_secret ${PROD_JWT_SECRET} --env p
 
 workflows:
   version: 2
