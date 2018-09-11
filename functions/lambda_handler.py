@@ -1,56 +1,84 @@
 import json
 
-from functions import auth, organization, user
+from functions import auth, organization, user, utils
 
 
 def encode_token(event, context):
     """Receive a username and password, and return a JWT token"""
     username = event['query']['username']
     password = event['query']['password']
-    return auth.encode_token(username, password)
+
+    response = auth.encode_token(username, password)
+    response = utils.add_cors_headers(response)
+    return response
 
 
 def authorize(event, context):
-    return auth.authenticate_user(event['headers']['Authorization'])
+    response = auth.authenticate_user(event['headers']['Authorization'])
+    response = utils.add_cors_headers(response)
+    return response
 
 
 def list_organizations(event, context):
     """Return all of the organizations in the DB."""
-    return organization.ls()
+    response = organization.ls()
+    response = utils.add_cors_headers(response)
+    return response
 
 
 def create_organization(event, context):
     body = json.loads(event['body'])
-    return organization.create(body)
+
+    response = organization.create(body)
+    response = utils.add_cors_headers(response)
+    return response
 
 
 def create_organizations(event, context):
     body = json.loads(event['body'])
-    return organization.create_many(body)
+
+    response = organization.create_many(body)
+    response = utils.add_cors_headers(response)
+    return response
 
 
 def retrieve_organization(event, context):
     key = event['path']['id']
-    return organization.retrieve(key)
+
+    response = organization.retrieve(key)
+    response = utils.add_cors_headers(response)
+    return response
 
 
 def update_organization(event, context):
     key = event['path']['id']
     body = json.loads(event['body'])
-    return organization.update(key, body)
+
+    response = organization.update(key, body)
+    response = utils.add_cors_headers(response)
+    return response
 
 
 def delete_organization(event, context):
     key = event['path']['id']
-    return organization.delete(key)
+
+    response = organization.delete(key)
+    response = utils.add_cors_headers(response)
+    return response
 
 
 def create_user(event, context):
     body = json.loads(event['body'])
-    return user.create(body)
+
+    response = user.create(body)
+    response = utils.add_cors_headers(response)
+    return response
 
 
 def change_email(event, context):
     username = event['path']['username']
     body = json.loads(event['body'])
-    return user.change_email(username, body)
+
+    response = user.change_email(username, body)
+    response = utils.add_cors_headers(response)
+    return response

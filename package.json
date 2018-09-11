@@ -6,5 +6,8 @@
   "license": "",
   "dependencies": {
     "serverless-python-requirements": "^4.1.0"
+  },
+  "devDependencies": {
+    "serverless-offline-python": "^3.21.2"
   }
 }

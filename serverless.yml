@@ -34,11 +34,24 @@ package:
     - functions/*.py
 
 plugins:
+  - serverless-offline-python
   - serverless-python-requirements
 
 custom:
   pythonRequirements:
     dockerizePip: non-linux
+
+cors: &cors
+  origins:
+    - '*'
+  headers:
+    - Content-Type
+    - X-Amz-Date
+    - Authorization
+    - X-Api-Key
+    - X-Amz-Security-Token
+    - X-Amz-User-Agent
+  allowCredentials: false
 
 functions:
 #  auth:
@@ -50,14 +63,12 @@ functions:
       - http:
           path: token
           method: get
+          cors: *cors
           request:
             parameters:
               querystrings:
                 username: true
                 password: true
-          cors:
-            origins:
-            - '*'
 
   list-organizations:
     handler: functions/lambda_handler.list_organizations
@@ -65,9 +76,7 @@ functions:
       - http:
           path: organizations
           method: get
-          cors:
-            origins:
-            - '*'
+          cors: *cors
 
   create-organization:
     handler: functions/lambda_handler.create_organization
@@ -76,30 +85,24 @@ functions:
           path: organizations
           method: post
 #          authorizer: auth
-          cors:
-            origins:
-            - '*'
+          cors: *cors
 
   create-organizations:
     handler: functions/lambda_handler.create_organizations
     events:
-    - http:
-        path: organizations/many
-        method: post
-#        authorizer: auth
-        cors:
-          origins:
-          - '*'
+      - http:
+          path: organizations/many
+          method: post
+  #        authorizer: auth
+          cors: *cors
 
 #  update-organizations:
 #    handler: functions/lambda_handler.update_organizations
 #    events:
-#    - http:
-#        path: organizations/many
-#        method: patch
-#        cors:
-#          origins:
-#          - '*'
+#      - http:
+#          path: organizations/many
+#          method: patch
+#          cors: *cors
 
   retrieve-organization:
     handler: functions/lambda_handler.retrieve_organization
@@ -111,9 +114,7 @@ functions:
             parameters:
               paths:
                 id: true
-          cors:
-            origins:
-            - '*'
+          cors: *cors
 
   update-organization:
     handler: functions/lambda_handler.update_organization
@@ -126,9 +127,7 @@ functions:
             parameters:
               paths:
                 id: true
-          cors:
-            origins:
-            - '*'
+          cors: *cors
 
   delete-organization:
     handler: functions/lambda_handler.delete_organization
@@ -137,13 +136,11 @@ functions:
           path: organizations/{id}
           method: delete
 #          authorizer: auth
+          cors: *cors
           request:
             parameters:
               paths:
                 id: true
-          cors:
-            origins:
-            - '*'
 
   create-user:
     handler: functions/lambda_handler.create_user
@@ -151,21 +148,17 @@ functions:
       - http:
           path: users
           method: post
-          cors:
-            origins:
-            - '*'
+          cors: *cors
 
   change-email:
     handler: functions/lambda_handler.change_email
     events:
-    - http:
-        path: users/{username}/email
-        method: patch
-#        authorizer: auth
-        request:
-          parameters:
-            paths:
-              username: true
-        cors:
-          origins:
-          - '*'
+      - http:
+          path: users/{username}/email
+          method: patch
+  #        authorizer: auth
+          cors: *cors
+          request:
+            parameters:
+              paths:
+                username: true
