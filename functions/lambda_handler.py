@@ -5,8 +5,8 @@ from functions import auth, organization, user, utils
 
 def encode_token(event, context):
     """Receive a username and password, and return a JWT token"""
-    username = event['query']['username']
-    password = event['query']['password']
+    username = event['queryStringParameters']['username']
+    password = event['queryStringParameters']['password']
 
     response = auth.encode_token(username, password)
     response = utils.add_cors_headers(response)
@@ -43,15 +43,14 @@ def create_organizations(event, context):
 
 
 def retrieve_organization(event, context):
-    key = event['path']['id']
-
+    key = event['pathParameters']['id']
     response = organization.retrieve(key)
     response = utils.add_cors_headers(response)
     return response
 
 
 def update_organization(event, context):
-    key = event['path']['id']
+    key = event['pathParameters']['id']
     body = json.loads(event['body'])
 
     response = organization.update(key, body)
@@ -60,7 +59,7 @@ def update_organization(event, context):
 
 
 def delete_organization(event, context):
-    key = event['path']['id']
+    key = event['pathParameters']['id']
 
     response = organization.delete(key)
     response = utils.add_cors_headers(response)
@@ -76,7 +75,7 @@ def create_user(event, context):
 
 
 def change_email(event, context):
-    username = event['path']['username']
+    username = event['pathParameters']['username']
     body = json.loads(event['body'])
 
     response = user.change_email(username, body)
