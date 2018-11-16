@@ -36,6 +36,7 @@ package:
 plugins:
   - serverless-offline-python
   - serverless-python-requirements
+  - serverless-dynamodb-local
 
 custom:
   pythonRequirements:
