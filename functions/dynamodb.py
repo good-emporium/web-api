@@ -1,10 +1,7 @@
 import json
 import logging
-import boto3
 
 from pynamodb.exceptions import DeleteError, DoesNotExist
-
-dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
 
 # TODO add pagination
 # TODO return just the columns needed, vs everything; use an index
@@ -21,28 +18,8 @@ def ls(model):
 
 # TODO don't add dupe
 def create(model, body):
-    # entry = model(**body)
-    # entry.save()
-    # if model == 'UserModel':
-    #     print('its a user model')
-    table = 'd-users'
-    # else:
-        # table = dynamodb.Table('organizations')
-    response = dynamodb.put_item(TableName=table, Item={
-        "username": "test_obee",
-        "active": "true",
-        "first_name": "obee",
-        "middle_name": "foe",
-        "last_name": "doe"
-    }, ReturnValues='ALL_OLD')
-
-    print("PutItem succeeded:")
-    print(json.dumps(response))
-    return {
-        'body': 'success',
-        'statusCode': 201
-    }
-
+    entry = model(**body)
+    entry.save()
 
 # TODO make use of the batch operations
 # https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
