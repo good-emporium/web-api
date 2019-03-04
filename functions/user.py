@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from functions import UserModel, dynamodb, utils
+from functions import UserModel, dynamodb, utils, errors
 
 
 def _validate_and_prep(user):
@@ -17,17 +17,19 @@ def _validate_and_prep(user):
     return clean_values
 
 
+
 def create(body):
     user = _validate_and_prep(body)
     if 'error_message' in user:
+        return errors.BaseError(422, user['error_message']).to_dict()
         return {
             'statusCode': 422,
             'body': json.dumps({'error_message': user['error_message']})
         }
-
-    user['created_at'] = datetime.now()
-    return dynamodb.create(UserModel, user)
-
+    except ValueError as e:
+        return errors.CreateRecordError(f"Error in creating user: {str(e)}").to_dict()
+    except UserModel.DoesNotExist:
+        return errors.NotFoundError(f"'{username}' does not exist").to_dict()
 
 def retrieve(key):
     return dynamodb.retrieve(UserModel, key)
