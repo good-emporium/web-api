@@ -1,33 +1,38 @@
 import json
 from datetime import datetime
 
-from functions import UserModel, dynamodb, utils
+from functions import UserModel, dynamodb, utils, errors
 
 
 def _validate_and_prep(user):
     fields = [c[0] for c in UserModel.columns]
     clean_values = utils.validate_and_prep(user, fields)
 
-    if 'username' not in clean_values and not clean_values['username']:
+    if 'username' not in clean_values or not clean_values['username']:
         return {'error_message': 'Missing the username'}
-
-    if 'email' not in clean_values and not clean_values['email']:
-        return {'error_message': 'Missing the email address'}
-
+    if 'email' not in clean_values or not clean_values['email']:
+        return {'error_message': 'Missing the email'}
     return clean_values
+
 
 
 def create(body):
     user = _validate_and_prep(body)
     if 'error_message' in user:
+        return errors.BaseError(422, user['error_message']).to_dict()
+    try:
+        username = user['username']
+        user['created_at'] = datetime.now()
+        dynamodb.create(UserModel, user)
+        new_user = dynamodb.retrieve(UserModel, username)
         return {
-            'statusCode': 422,
-            'body': json.dumps({'error_message': user['error_message']})
+            'statusCode': 201,
+            'body': new_user
         }
-
-    user['created_at'] = datetime.now()
-    return dynamodb.create(UserModel, user)
-
+    except ValueError as e:
+        return errors.CreateRecordError(f"Error in creating user: {str(e)}").to_dict()
+    except UserModel.DoesNotExist:
+        return errors.NotFoundError(f"'{username}' does not exist").to_dict()
 
 def retrieve(key):
     return dynamodb.retrieve(UserModel, key)

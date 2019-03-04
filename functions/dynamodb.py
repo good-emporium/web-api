@@ -3,7 +3,6 @@ import logging
 
 from pynamodb.exceptions import DeleteError, DoesNotExist
 
-
 # TODO add pagination
 # TODO return just the columns needed, vs everything; use an index
 def ls(model):
@@ -22,11 +21,6 @@ def create(model, body):
     entry = model(**body)
     entry.save()
 
-    return {
-        'statusCode': 201
-    }
-
-
 # TODO make use of the batch operations
 # https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
 # def create_many(model, body):
@@ -40,18 +34,8 @@ def create(model, body):
 
 
 def retrieve(model, key):
-    try:
-        entry = model.get(hash_key=key)
-    except DoesNotExist:
-        return {
-            'statusCode': 404,
-            'body': json.dumps({'error_message': f"'{key}' not found"})
-        }
-
-    return {
-        'statusCode': 200,
-        'body': json.dumps(dict(entry))
-    }
+    entry = model.get(hash_key=key)
+    return json.dumps(dict(entry))
 
 
 # TODO check for duplicate org name + fail

@@ -8,7 +8,9 @@ def encode_token(event, context):
     username = event['queryStringParameters']['username']
     password = event['queryStringParameters']['password']
 
-    response = auth.encode_token(username, password)
+    response = {
+        'body': json.dumps(auth.encode_token(username, password))
+    }
     response = utils.add_cors_headers(response)
     return response
 
@@ -67,7 +69,7 @@ def delete_organization(event, context):
 
 
 def create_user(event, context):
-    body = json.loads(event['body'])
+    body = event['body']
 
     response = user.create(body)
     response = utils.add_cors_headers(response)
