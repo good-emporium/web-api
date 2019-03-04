@@ -8,12 +8,10 @@ def _validate_and_prep(user):
     fields = [c[0] for c in UserModel.columns]
     clean_values = utils.validate_and_prep(user, fields)
 
-    if 'username' not in clean_values and not clean_values['username']:
+    if 'username' not in clean_values or not clean_values['username']:
         return {'error_message': 'Missing the username'}
-
-    if 'email' not in clean_values and not clean_values['email']:
-        return {'error_message': 'Missing the email address'}
-
+    if 'email' not in clean_values or not clean_values['email']:
+        return {'error_message': 'Missing the email'}
     return clean_values
 
 
