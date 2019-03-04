@@ -20,9 +20,14 @@ def create(body):
     user = _validate_and_prep(body)
     if 'error_message' in user:
         return errors.BaseError(422, user['error_message']).to_dict()
+    try:
+        username = user['username']
+        user['created_at'] = datetime.now()
+        dynamodb.create(UserModel, user)
+        new_user = dynamodb.retrieve(UserModel, username)
         return {
-            'statusCode': 422,
-            'body': json.dumps({'error_message': user['error_message']})
+            'statusCode': 201,
+            'body': new_user
         }
     except ValueError as e:
         return errors.CreateRecordError(f"Error in creating user: {str(e)}").to_dict()
